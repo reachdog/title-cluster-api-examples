@@ -1,0 +1,11 @@
+{
+  "name": "reachdog-title-api-examples-js",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "JavaScript examples for the Reach Dog Title & Cluster API",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "quickstart": "node quickstart.js"
+  }
+}
