@@ -4,7 +4,7 @@ Turn a product title into structured product data: product type, attributes, cat
 
 This repository holds working, runnable examples for integrating the Reach Dog Title and Cluster API. The service implementation is private; everything here is client-side example code you can run against the live API with your own key.
 
-- Live demo: see the Hugging Face Space (link to be added)
+- Live demo: https://huggingface.co/spaces/ReachDog/product-classification-api-demo
 - Get a key: https://intersect.reach.dog/developer
 - API reference (OpenAPI): https://title-cluster-api-221381283627.us-east1.run.app/openapi.json
 
