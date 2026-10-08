@@ -110,7 +110,8 @@ Error envelopes always carry a `code`, a `message`, a `request_id`, and a `retry
 
 1. Create a developer key at https://intersect.reach.dog/developer
 2. Send it as `Authorization: Bearer <key>` and include an `Idempotency-Key` header on each request.
-3. Pricing is one unit per requested parameter, billed only when the request succeeds. A three-parameter request costs three units. A correct empty result still counts as a success; failed requests are not billed. See the access page for current plans and any free allowance.
+3. Pricing is per parameter (25 tokens each at current pricing), billed only when the request succeeds, with no base fee. A three-parameter request costs 75 tokens. A correct empty result still counts as a success; failed requests are not billed.
+4. Free tier: every account gets a daily free allowance of about 10,000 tokens (roughly 400 single-parameter calls at current pricing), refreshed every 24 hours, so you can evaluate the API without adding funds. See the access page for current pricing and plans.
 
 Repeating the same request with the same `Idempotency-Key` returns the saved answer with no new charge, within the idempotency window.
 
