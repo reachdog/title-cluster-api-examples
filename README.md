@@ -7,6 +7,7 @@ This repository holds working, runnable examples for integrating the Reach Dog T
 - Live demo: https://huggingface.co/spaces/ReachDog/product-classification-api-demo
 - Get a key: https://intersect.reach.dog/developer
 - Developer reference: [docs/api-reference.md](docs/api-reference.md)
+- Changelog: [docs/changelog.md](docs/changelog.md)
 - API reference (OpenAPI): https://title-cluster-api-221381283627.us-east1.run.app/openapi.json
 
 ## What can I build with this?
