@@ -27,7 +27,17 @@ What this contract provides:
 - Endpoints: `title-matches`, `market-research`, `content-generations`, `usage`, `versions`. Batch and catalog-grouping are not available to developer keys.
 - Pricing: 25 tokens per parameter at current pricing, billed on success only, with a free daily allowance. Check `/v1/usage` for your current price, balance and limits.
 
-This changelog starts from the current published contract. Earlier iterations predate it and are not itemized here.
+Changes to the contract are listed below, newest first. Iterations before these entries are not itemized.
+
+## 2026-10-08
+
+Changed:
+- Discovery and keyword parameters (`long_tail_keywords`, `search_phrases`, `search_volume`, `cpc`, `buyer_questions`, and related) now return more keyword records and fuller metrics.
+
+## 2026-10-04
+
+Fixed:
+- `cpc`, `competition_index` and `audience_fit` were intermittently returning `503 invalid_model_output`. They now return data reliably.
 
 ## Entry format
 
