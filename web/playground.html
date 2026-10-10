@@ -1,0 +1,1120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reach Dog Title API Workbench</title>
+<meta name="description" content="Build and run Reach Dog Title and Cluster API requests in the browser. Pick the parameters you want from a product title, see the exact cost, and copy ready-to-run code in eight languages.">
+<meta property="og:title" content="Reach Dog Title API Workbench">
+<meta property="og:description" content="Turn a product title into structured product data. Pick parameters, see the cost, copy code in eight languages.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230b7e38'/%3E%3Cpath fill='white' d='M8 8.2a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0Zm10.8 0a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0ZM10.6 6a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0Zm5.6 0a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0Zm-4.2 3.1c1.6 0 2.9 1.4 3.3 2.9.3 1.1-.7 2.1-1.8 1.9-.5-.1-1-.3-1.5-.3s-1 .2-1.5.3c-1.1.2-2.1-.8-1.8-1.9.4-1.5 1.7-2.9 3.3-2.9Z'/%3E%3C/svg%3E">
+<style>
+  /* ----- Design tokens (Intersect/Reach Dog system: RGB triples, light + dark) ----- */
+  :root {
+    --rd-bg-primary: 245 245 247;
+    --rd-bg-surface: 255 255 255;
+    --rd-bg-surface-2: 240 240 243;
+    --rd-text-primary: 26 26 30;
+    --rd-text-secondary: 85 85 96;
+    --rd-text-tertiary: 105 105 112;
+    --rd-border: 220 220 224;
+    --rd-brand: 11 126 56;        /* #0b7e38 */
+    --rd-brand-bright: 10 194 82; /* #0ac252 */
+    --rd-brand-ink: 255 255 255;
+    --rd-danger: 204 77 77;
+    --rd-accent-bg: rgba(11,126,56,0.06);
+    --rd-shadow: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --rd-bg-primary: 30 31 36;
+      --rd-bg-surface: 22 23 27;
+      --rd-bg-surface-2: 34 35 41;
+      --rd-text-primary: 240 245 250;
+      --rd-text-secondary: 155 166 184;
+      --rd-text-tertiary: 121 132 150;
+      --rd-border: 56 57 63;
+      --rd-brand: 47 184 102;        /* #2fb866 dark-lift */
+      --rd-brand-bright: 37 198 84;
+      --rd-brand-ink: 11 26 16;
+      --rd-danger: 232 138 138;
+      --rd-accent-bg: rgba(47,184,102,0.10);
+      --rd-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --rd-bg-primary: 30 31 36;
+    --rd-bg-surface: 22 23 27;
+    --rd-bg-surface-2: 34 35 41;
+    --rd-text-primary: 240 245 250;
+    --rd-text-secondary: 155 166 184;
+    --rd-text-tertiary: 121 132 150;
+    --rd-border: 56 57 63;
+    --rd-brand: 47 184 102;
+    --rd-brand-bright: 37 198 84;
+    --rd-brand-ink: 11 26 16;
+    --rd-danger: 232 138 138;
+    --rd-accent-bg: rgba(47,184,102,0.10);
+    --rd-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.35);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgb(var(--rd-text-primary));
+    background: rgb(var(--rd-bg-primary));
+    -webkit-font-smoothing: antialiased;
+  }
+  code, pre, .mono { font-family: var(--mono); }
+  button { font-family: inherit; cursor: pointer; }
+  ::selection { background: rgba(var(--rd-brand), 0.22); }
+
+  /* ----- App shell: three rails ----- */
+  .app {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 56px 272px minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  /* Rail 1 — icon rail */
+  .rail-icons {
+    background: rgb(var(--rd-bg-surface));
+    border-right: 0.5px solid rgb(var(--rd-border));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px));
+    gap: 8px;
+    overflow-y: auto;
+  }
+  .brandmark {
+    width: 34px; height: 34px; border-radius: 10px; flex: 0 0 34px;
+    display: grid; place-items: center;
+    background: rgb(var(--rd-brand)); color: rgb(var(--rd-brand-ink));
+    margin-bottom: 4px;
+  }
+  .brandmark svg { width: 20px; height: 20px; }
+  .rail-sep { width: 24px; height: 0.5px; background: rgb(var(--rd-border)); margin: 2px 0; }
+  .proj-avatar {
+    width: 36px; height: 36px; border-radius: 10px; flex: 0 0 36px;
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
+    color: #fff; border: none; position: relative;
+    transition: transform .1s ease, box-shadow .12s ease;
+  }
+  .proj-avatar:hover { transform: translateY(-1px); }
+  .proj-avatar[aria-current="true"]::before {
+    content: ""; position: absolute; left: -10px; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 20px; border-radius: 2px; background: rgb(var(--rd-text-primary));
+  }
+  .proj-avatar[aria-current="true"] { box-shadow: 0 0 0 2px rgb(var(--rd-bg-surface)), 0 0 0 4px rgba(var(--rd-brand),0.55); }
+  .rail-spacer { flex: 1 1 auto; }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 10px; flex: 0 0 36px;
+    display: grid; place-items: center;
+    background: transparent; border: 0.5px solid transparent;
+    color: rgb(var(--rd-text-secondary));
+  }
+  .icon-btn:hover { background: rgb(var(--rd-bg-surface-2)); color: rgb(var(--rd-text-primary)); border-color: rgb(var(--rd-border)); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .icon-btn.add { color: rgb(var(--rd-brand)); }
+
+  /* Rail 2 — list rail */
+  .rail-list {
+    background: rgb(var(--rd-bg-surface));
+    border-right: 0.5px solid rgb(var(--rd-border));
+    display: flex; flex-direction: column;
+    min-width: 0;
+  }
+  .list-head { padding: 14px 16px 10px; border-bottom: 0.5px solid rgb(var(--rd-border)); }
+  .list-proj { display: flex; align-items: center; gap: 9px; min-width: 0; }
+  .list-dot { width: 20px; height: 20px; border-radius: 6px; flex: 0 0 20px; display:grid; place-items:center; font-size:10px; font-weight:700; color:#fff; }
+  .list-proj h2 { font-size: 15px; font-weight: 650; margin: 0; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .list-proj .mini { margin-left: auto; }
+  .seg { display: inline-flex; background: rgb(var(--rd-bg-surface-2)); border: 0.5px solid rgb(var(--rd-border)); border-radius: 9px; padding: 2px; margin-top: 12px; width: 100%; }
+  .seg button { flex: 1; border: none; background: transparent; color: rgb(var(--rd-text-secondary)); font-size: 12.5px; font-weight: 550; padding: 5px 8px; border-radius: 7px; }
+  .seg button[aria-selected="true"] { background: rgb(var(--rd-bg-surface)); color: rgb(var(--rd-text-primary)); box-shadow: var(--rd-shadow); }
+  .list-tools { display: flex; gap: 8px; padding: 10px 14px; align-items: center; }
+  .search { flex: 1; min-width: 0; display: flex; align-items: center; gap: 7px; background: rgb(var(--rd-bg-surface-2)); border: 0.5px solid rgb(var(--rd-border)); border-radius: 9px; padding: 6px 9px; }
+  .search input { border: none; background: transparent; outline: none; width: 100%; font-size: 13px; color: rgb(var(--rd-text-primary)); }
+  .search svg { width: 14px; height: 14px; color: rgb(var(--rd-text-tertiary)); flex: 0 0 14px; }
+  .btn-new { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; background: rgb(var(--rd-brand)); color: rgb(var(--rd-brand-ink)); border: none; border-radius: 9px; padding: 7px 11px; font-size: 12.5px; font-weight: 600; }
+  .btn-new svg { width: 14px; height: 14px; }
+  .item-list { flex: 1 1 auto; overflow-y: auto; padding: 4px 8px 16px; }
+  .item {
+    display: block; width: 100%; text-align: left; border: none; background: transparent;
+    border-radius: 10px; padding: 9px 11px; margin-bottom: 2px; color: inherit;
+  }
+  .item:hover { background: rgb(var(--rd-bg-surface-2)); }
+  .item[aria-current="true"] { background: var(--rd-accent-bg); box-shadow: inset 2px 0 0 rgb(var(--rd-brand)); }
+  .item .row1 { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .item .kind { font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; border-radius: 999px; flex: 0 0 auto; }
+  .kind.request { color: rgb(var(--rd-brand)); background: var(--rd-accent-bg); }
+  .kind.catalog { color: rgb(var(--rd-text-secondary)); background: rgb(var(--rd-bg-surface-2)); border: 0.5px solid rgb(var(--rd-border)); }
+  .item .name { font-size: 13.5px; font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item .sub { font-size: 11.5px; color: rgb(var(--rd-text-tertiary)); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .list-empty { padding: 26px 18px; text-align: center; color: rgb(var(--rd-text-tertiary)); font-size: 12.5px; }
+  .list-foot { border-top: 0.5px solid rgb(var(--rd-border)); padding: 10px 14px calc(10px + env(safe-area-inset-bottom,0px)); font-size: 11.5px; color: rgb(var(--rd-text-tertiary)); display: flex; align-items: center; gap: 7px; }
+  .list-foot .free { color: rgb(var(--rd-brand)); font-weight: 600; }
+
+  /* Rail 3 — workspace */
+  .work { min-width: 0; display: flex; flex-direction: column; background: rgb(var(--rd-bg-primary)); }
+  .work-top {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 20px; height: 54px; flex: 0 0 54px;
+    border-bottom: 0.5px solid rgb(var(--rd-border));
+    background: rgb(var(--rd-bg-surface));
+  }
+  .crumbs { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13.5px; }
+  .crumbs .muted { color: rgb(var(--rd-text-tertiary)); }
+  .crumbs .cur { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .crumbs .chev { color: rgb(var(--rd-text-tertiary)); }
+  .cost-pill {
+    margin-left: auto; display: inline-flex; align-items: center; gap: 8px;
+    background: rgb(var(--rd-bg-surface-2)); border: 0.5px solid rgb(var(--rd-border));
+    border-radius: 999px; padding: 5px 12px; font-size: 12px; color: rgb(var(--rd-text-secondary)); white-space: nowrap;
+  }
+  .cost-pill b { color: rgb(var(--rd-text-primary)); font-variant-numeric: tabular-nums; }
+  .cost-pill .free { color: rgb(var(--rd-brand)); font-weight: 600; }
+  .menu-toggle { display: none; }
+
+  .work-body { flex: 1 1 auto; overflow-y: auto; }
+  .pane { max-width: 920px; margin: 0 auto; padding: 24px 20px 64px; }
+
+  /* Item view: main column + parameters rail */
+  .pane-split { padding: 20px 20px 48px; }
+  .ws-split { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 18px; align-items: start; }
+  .ws-main { min-width: 0; }
+  .param-rail { position: sticky; top: 0; align-self: start; max-height: calc(100vh - 86px); overflow-y: auto; background: rgb(var(--rd-bg-surface)); border: 0.5px solid rgb(var(--rd-border)); border-radius: 14px; box-shadow: var(--rd-shadow); }
+  .param-rail-head { position: sticky; top: 0; z-index: 1; background: rgb(var(--rd-bg-surface)); padding: 13px 15px; border-bottom: 0.5px solid rgb(var(--rd-border)); font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: rgb(var(--rd-brand)); display: flex; align-items: center; gap: 6px; }
+  .param-rail-head .cnt { margin-left: auto; color: rgb(var(--rd-text-tertiary)); font-weight: 600; letter-spacing: 0; text-transform: none; font-size: 11px; }
+  .param-rail-body { padding: 10px 12px 14px; }
+  .param-rail .pgroup { border: none; border-radius: 0; padding: 10px 2px 12px; margin: 0; border-bottom: 0.5px solid rgb(var(--rd-border)); }
+  .param-rail .pgroup:last-child { border-bottom: none; padding-bottom: 2px; }
+  .param-rail .params { grid-template-columns: 1fr; gap: 9px 0; }
+
+  /* Empty state */
+  .empty { max-width: 560px; margin: 0 auto; padding: 72px 20px; text-align: center; }
+  .empty .mark { width: 54px; height: 54px; border-radius: 14px; margin: 0 auto 18px; display: grid; place-items: center; background: var(--rd-accent-bg); color: rgb(var(--rd-brand)); }
+  .empty .mark svg { width: 26px; height: 26px; }
+  .empty h1 { font-size: 20px; margin: 0 0 8px; letter-spacing: -0.01em; text-wrap: balance; }
+  .empty p { color: rgb(var(--rd-text-secondary)); margin: 0 auto 22px; max-width: 42ch; }
+  .empty .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  /* Cards + fields */
+  .card { background: rgb(var(--rd-bg-surface)); border: 0.5px solid rgb(var(--rd-border)); border-radius: 14px; box-shadow: var(--rd-shadow); margin-bottom: 16px; }
+  .card > .card-head { padding: 13px 16px; border-bottom: 0.5px solid rgb(var(--rd-border)); display: flex; align-items: center; gap: 10px; }
+  .card-head .eyebrow { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: rgb(var(--rd-brand)); }
+  .card-head .r { margin-left: auto; }
+  .card-body { padding: 16px; }
+  label.lbl { display: block; font-size: 11px; font-weight: 650; letter-spacing: 0.03em; text-transform: uppercase; color: rgb(var(--rd-text-tertiary)); margin: 0 0 7px; }
+  .in {
+    width: 100%; font-size: 14px; color: rgb(var(--rd-text-primary));
+    background: rgb(var(--rd-bg-surface)); border: 0.5px solid rgb(var(--rd-border));
+    border-radius: 10px; padding: 10px 12px; outline: none;
+  }
+  .in:focus { border-color: rgb(var(--rd-brand)); box-shadow: 0 0 0 3px rgba(var(--rd-brand),0.14); }
+  textarea.in { resize: vertical; min-height: 120px; font-family: var(--mono); font-size: 12.5px; line-height: 1.55; }
+  .hint { font-size: 12px; color: rgb(var(--rd-text-tertiary)); margin-top: 7px; }
+  .field + .field { margin-top: 15px; }
+  .keyrow { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+  .keyrow .grow { flex: 1 1 220px; min-width: 0; }
+  .remember { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: rgb(var(--rd-text-secondary)); white-space: nowrap; padding-bottom: 10px; }
+
+  /* Parameter groups */
+  .pgroup { border: 0.5px solid rgb(var(--rd-border)); border-radius: 12px; padding: 12px 14px; margin: 0 0 12px; }
+  .pgroup legend, .pgroup .legend { font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: rgb(var(--rd-text-secondary)); padding: 0; margin-bottom: 10px; }
+  .params { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 7px 14px; }
+  .chk { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+  .chk input { width: 15px; height: 15px; accent-color: rgb(var(--rd-brand)); flex: 0 0 15px; }
+  .chk code { font-size: 12.5px; color: rgb(var(--rd-text-primary)); }
+  .tag { font-size: 9px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: rgb(var(--rd-text-tertiary)); border: 0.5px solid rgb(var(--rd-border)); border-radius: 999px; padding: 1px 6px; }
+
+  .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 7px; background: rgb(var(--rd-brand)); color: rgb(var(--rd-brand-ink)); border: none; border-radius: 10px; padding: 10px 16px; font-size: 13.5px; font-weight: 600; }
+  .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-ghost { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: rgb(var(--rd-text-secondary)); border: 0.5px solid rgb(var(--rd-border)); border-radius: 10px; padding: 9px 13px; font-size: 13px; font-weight: 550; }
+  .btn-ghost:hover { color: rgb(var(--rd-text-primary)); background: rgb(var(--rd-bg-surface-2)); }
+  .btn-primary svg, .btn-ghost svg { width: 15px; height: 15px; }
+
+  /* Response + snippet */
+  .statusline { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .pill { font-size: 11.5px; font-weight: 700; padding: 2px 9px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+  .pill.ok { color: rgb(var(--rd-brand)); background: var(--rd-accent-bg); }
+  .pill.bad { color: rgb(var(--rd-danger)); background: rgba(var(--rd-danger),0.12); }
+  .meta { font-size: 12px; color: rgb(var(--rd-text-tertiary)); }
+  pre.output { margin: 0; background: rgb(var(--rd-bg-surface-2)); border: 0.5px solid rgb(var(--rd-border)); border-radius: 10px; padding: 14px; font-size: 12.5px; line-height: 1.55; overflow-x: auto; white-space: pre; max-height: 460px; }
+  .note { font-size: 12.5px; line-height: 1.55; color: rgb(var(--rd-text-secondary)); margin-top: 10px; }
+  .note.warnbox { background: rgba(var(--rd-danger),0.08); border: 0.5px solid rgba(var(--rd-danger),0.3); border-radius: 10px; padding: 11px 13px; color: rgb(var(--rd-text-primary)); }
+  .note.infobox { background: var(--rd-accent-bg); border: 0.5px solid rgba(var(--rd-brand),0.3); border-radius: 10px; padding: 11px 13px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+  .tab { border: 0.5px solid transparent; background: transparent; color: rgb(var(--rd-text-secondary)); font-size: 12.5px; font-weight: 550; padding: 5px 11px; border-radius: 8px; }
+  .tab[aria-selected="true"] { background: rgb(var(--rd-bg-surface-2)); color: rgb(var(--rd-text-primary)); border-color: rgb(var(--rd-border)); }
+  .snipwrap { position: relative; }
+  .snipwrap .copy { position: absolute; top: 10px; right: 10px; }
+
+  /* Scrollbars */
+  .item-list::-webkit-scrollbar, .work-body::-webkit-scrollbar, pre.output::-webkit-scrollbar, .rail-icons::-webkit-scrollbar { width: 10px; height: 10px; }
+  .item-list::-webkit-scrollbar-thumb, .work-body::-webkit-scrollbar-thumb, pre.output::-webkit-scrollbar-thumb { background: rgb(var(--rd-border)); border-radius: 999px; border: 3px solid transparent; background-clip: padding-box; }
+
+  .scrim { display: none; }
+
+  /* ----- Console section nav (icon rail) ----- */
+  .nav-group { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+  .nav-item[aria-current="true"] { color: rgb(var(--rd-brand)); background: var(--rd-accent-bg); border-color: rgba(var(--rd-brand),0.3); position: relative; }
+  .nav-item[aria-current="true"]::before { content: ""; position: absolute; left: -10px; top: 50%; transform: translateY(-50%); width: 3px; height: 18px; border-radius: 2px; background: rgb(var(--rd-brand)); }
+  body.view-full .app { grid-template-columns: 56px minmax(0, 1fr); }
+  body.view-full .rail-list { display: none; }
+  body.view-full .menu-toggle { display: none; }
+  body.view-full #projSection, body.view-full #projSep { display: none; }
+
+  /* ----- Dashboards (Usage / Billing / API keys) ----- */
+  .dash { max-width: 1040px; margin: 0 auto; padding: 24px 22px 64px; }
+  .dash-head { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+  .dash-head h1 { font-size: 22px; margin: 0; letter-spacing: -0.02em; }
+  .dash-head .sub { color: rgb(var(--rd-text-secondary)); font-size: 13px; }
+  .dash-head .r { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+  .badge { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .badge.live { color: rgb(var(--rd-brand)); background: var(--rd-accent-bg); }
+  .badge.eg { color: rgb(var(--rd-text-tertiary)); background: rgb(var(--rd-bg-surface-2)); border: 0.5px solid rgb(var(--rd-border)); }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 18px; }
+  .tile { background: rgb(var(--rd-bg-surface)); border: 0.5px solid rgb(var(--rd-border)); border-radius: 14px; padding: 16px; box-shadow: var(--rd-shadow); }
+  .tile .k { font-size: 11px; font-weight: 650; letter-spacing: 0.03em; text-transform: uppercase; color: rgb(var(--rd-text-tertiary)); }
+  .tile .v { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .tile .s { font-size: 12px; color: rgb(var(--rd-text-secondary)); margin-top: 4px; }
+  .panel { background: rgb(var(--rd-bg-surface)); border: 0.5px solid rgb(var(--rd-border)); border-radius: 14px; box-shadow: var(--rd-shadow); margin-bottom: 16px; }
+  .panel-head { padding: 14px 16px; border-bottom: 0.5px solid rgb(var(--rd-border)); display: flex; align-items: center; gap: 10px; }
+  .panel-head h2 { font-size: 14px; margin: 0; font-weight: 650; }
+  .panel-head .r { margin-left: auto; }
+  .panel-body { padding: 16px; }
+  .bars { display: flex; align-items: flex-end; gap: 6px; height: 170px; padding-top: 8px; }
+  .bar { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px; height: 100%; }
+  .bar .fill { width: 100%; max-width: 26px; background: rgb(var(--rd-brand-bright)); border-radius: 5px 5px 0 0; min-height: 2px; }
+  .bar .d { font-size: 10px; color: rgb(var(--rd-text-tertiary)); white-space: nowrap; }
+  .dtable { width: 100%; border-collapse: collapse; }
+  .dtable th { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: rgb(var(--rd-text-tertiary)); text-align: left; padding: 9px 12px; border-bottom: 0.5px solid rgb(var(--rd-border)); }
+  .dtable th.r, .dtable td.r { text-align: right; font-variant-numeric: tabular-nums; }
+  .dtable td { font-size: 13px; padding: 11px 12px; border-bottom: 0.5px solid rgb(var(--rd-border)); }
+  .dtable tr:last-child td { border-bottom: none; }
+  .creditgrid { display: flex; gap: 10px; flex-wrap: wrap; }
+  .credit { border: 0.5px solid rgb(var(--rd-border)); border-radius: 12px; padding: 14px 18px; text-align: center; min-width: 118px; background: rgb(var(--rd-bg-surface-2)); }
+  .credit .amt { font-size: 18px; font-weight: 700; }
+  .credit .tok { font-size: 12px; color: rgb(var(--rd-text-secondary)); margin-top: 2px; }
+  .switchrow { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-top: 0.5px solid rgb(var(--rd-border)); }
+  .switchrow:first-child { border-top: none; padding-top: 2px; }
+  .switchrow .txt { min-width: 0; }
+  .switchrow .txt .t { font-weight: 600; font-size: 13.5px; }
+  .switchrow .txt .d2 { font-size: 12px; color: rgb(var(--rd-text-tertiary)); margin-top: 2px; }
+  .switchrow .r { margin-left: auto; }
+  .meter { height: 8px; border-radius: 999px; background: rgb(var(--rd-bg-surface-2)); overflow: hidden; margin-top: 10px; }
+  .meter > span { display: block; height: 100%; background: rgb(var(--rd-brand)); border-radius: 999px; }
+  .keymask { font-family: var(--mono); font-size: 12.5px; }
+
+  /* ----- Responsive: list rail becomes a drawer under 860px ----- */
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 52px minmax(0, 1fr); }
+    .rail-list {
+      position: fixed; top: 0; bottom: 0; left: 52px; width: 272px; z-index: 40;
+      transform: translateX(-110%); transition: transform .18s ease; box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+    }
+    body.list-open .rail-list { transform: translateX(0); }
+    body.list-open .scrim { display: block; position: fixed; inset: 0; z-index: 35; background: rgba(0,0,0,0.35); }
+    .menu-toggle { display: grid; }
+  }
+  @media (max-width: 900px) {
+    .ws-split { grid-template-columns: 1fr; gap: 14px; }
+    .param-rail { position: static; max-height: none; order: -1; }
+  }
+  @media (max-width: 520px) {
+    .pane, .pane-split { padding: 18px 14px 56px; }
+    .cost-pill .lbl-txt { display: none; }
+  }
+</style>
+
+</head>
+<body>
+<div class="app">
+  <!-- Rail 1: icons -->
+  <nav class="rail-icons" aria-label="Projects">
+    <div class="brandmark" title="Reach Dog Title API">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 9.5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm14 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM10 6.5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm-6 4.2c2.2 0 4 1.9 4.5 3.9.4 1.6-.9 2.9-2.5 2.6-.7-.1-1.3-.4-2-.4s-1.3.3-2 .4c-1.6.3-2.9-1-2.5-2.6.5-2 2.3-3.9 4.5-3.9Z"/></svg>
+    </div>
+    <div class="rail-sep"></div>
+    <div class="nav-group" id="sectionNav">
+      <button class="icon-btn nav-item" data-view="playground" aria-current="true" title="Playground" aria-label="Playground">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M13.5 7l-3 10"/></svg>
+      </button>
+      <button class="icon-btn nav-item" data-view="usage" title="Usage" aria-label="Usage">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V5M16 20v-6M22 20H2"/></svg>
+      </button>
+      <button class="icon-btn nav-item" data-view="billing" title="Billing" aria-label="Billing">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19"/></svg>
+      </button>
+      <button class="icon-btn nav-item" data-view="keys" title="API keys" aria-label="API keys">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="4"/><path d="m11 11 8 8M16.5 16.5 19 14"/></svg>
+      </button>
+    </div>
+    <div class="rail-sep" id="projSep"></div>
+    <div id="projSection" style="display:flex;flex-direction:column;gap:8px;align-items:center;">
+      <div id="projAvatars" style="display:flex;flex-direction:column;gap:8px;align-items:center;"></div>
+      <button class="icon-btn add" id="addProjectTop" title="New project" aria-label="New project">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </div>
+    <div class="rail-spacer"></div>
+    <button class="icon-btn" id="themeBtn" title="Theme" aria-label="Toggle theme">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5 5 19" stroke-linecap="round"/></svg>
+    </button>
+    <a class="icon-btn" id="docsLink" href="https://github.com/reachdog/title-cluster-api-examples" target="_blank" rel="noopener" title="Docs & examples" aria-label="Docs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H18a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5.5Z"/><path d="M8 4v16" stroke-linecap="round"/></svg>
+    </a>
+  </nav>
+
+  <!-- Rail 2: list -->
+  <aside class="rail-list">
+    <div class="list-head">
+      <div class="list-proj">
+        <span class="list-dot" id="listDot"></span>
+        <h2 id="projName">—</h2>
+        <button class="icon-btn mini" id="renameProject" title="Rename project" aria-label="Rename project" style="width:28px;height:28px;flex:0 0 28px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
+        </button>
+      </div>
+      <div class="seg" role="tablist" aria-label="Section">
+        <button role="tab" data-sec="request" aria-selected="true">Requests</button>
+        <button role="tab" data-sec="catalog" aria-selected="false">Catalogs</button>
+      </div>
+    </div>
+    <div class="list-tools">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3" stroke-linecap="round"/></svg>
+        <input id="searchInput" placeholder="Search" aria-label="Search items">
+      </div>
+      <button class="btn-new" id="newItem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span id="newItemLabel">New</span></button>
+    </div>
+    <div class="item-list" id="itemList"></div>
+    <div class="list-foot">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:0 0 14px;color:rgb(var(--rd-brand));"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span><span class="free">Free tier:</span> ~10,000 tokens / 24h</span>
+    </div>
+  </aside>
+
+  <!-- Rail 3: workspace -->
+  <main class="work">
+    <div class="work-top">
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Open list" style="margin-left:-6px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="crumbs">
+        <span class="muted" id="crumbProj">—</span>
+        <span class="chev">/</span>
+        <span class="cur" id="crumbItem">Welcome</span>
+      </div>
+      <div class="cost-pill" id="costPill" hidden>
+        <span><span class="lbl-txt">parameters </span><b id="costParams">0</b></span>
+        <span style="opacity:.5">·</span>
+        <span><b id="costTokens">0</b> tokens</span>
+        <span class="free">free tier</span>
+      </div>
+    </div>
+    <div class="work-body" id="workBody"></div>
+  </main>
+</div>
+<div class="scrim" id="scrim"></div>
+
+<script>
+(function () {
+  "use strict";
+  // When this page is served from api.reach.dog, the API is on the SAME origin,
+  // so the live call needs no absolute host and no CORS. Anywhere else (local
+  // preview, the raw bucket URL, a Claude artifact) it falls back to the public
+  // Cloud Run URL and the no-CORS path shows the copyable request instead.
+  const SAME_ORIGIN = location.hostname === "api.reach.dog";
+  // Shown in the copyable snippets (always an absolute, brandable endpoint).
+  const API_URL = SAME_ORIGIN ? "https://api.reach.dog" : "https://title-cluster-api-221381283627.us-east1.run.app";
+  // Used for the live fetch ("" => same-origin request to /v1/...).
+  const FETCH_BASE = SAME_ORIGIN ? "" : "https://title-cluster-api-221381283627.us-east1.run.app";
+  const PRICE = 25; // tokens per parameter at current pricing
+  const KEY = "rdplay_v1";
+
+  // Title-matches parameters that work today, grouped. Keyword metrics are marked slow.
+  const GROUPS = [
+    ["Product", ["product_type","brand","attributes","categories","use_cases","occasions","audiences","seasons","where","why","how","synonyms"], []],
+    ["Buyer language", ["intent_phrases","long_tail_keywords","buyer_questions","search_phrases","cluster_ids"], ["long_tail_keywords","buyer_questions","search_phrases"]],
+    ["Keyword metrics", ["search_volume","cpc","paid_search_competition","competition_index","keyword_bid_range","demand_trend","monthly_demand","keyword_intent_stages"], ["search_volume","cpc","paid_search_competition","competition_index","keyword_bid_range","demand_trend","monthly_demand","keyword_intent_stages"]],
+    ["Merchandising", ["collection_suggestions","facets","related_product_types","alternative_product_types","compatibility","variant_dimensions","missing_attributes"], []],
+  ];
+  const DEFAULTS = ["product_type","attributes","categories","synonyms"];
+  const SLOW = new Set(GROUPS.flatMap(g => g[2]));
+  const ALL_PARAMS = GROUPS.flatMap(g => g[1]);
+  const AVATAR_COLORS = ["#0b7e38","#4f46e5","#1097a9","#c98a1b","#b4456f","#5a6b7b","#0ac252","#7c3aed"];
+  const $ = id => document.getElementById(id);
+  const uid = () => Math.random().toString(36).slice(2, 10);
+  const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+  // ---------- state ----------
+  let state = null;
+  function blankProject(name) {
+    const i = (state ? state.projects.length : 0) % AVATAR_COLORS.length;
+    return { id: uid(), name: name || "My project", color: AVATAR_COLORS[i], items: [] };
+  }
+  function seed() {
+    const p = blankProject("My first project");
+    p.items.push({ id: uid(), kind: "request", name: "Waterproof camping tent", title: "4 person camping tent waterproof", params: DEFAULTS.slice(), response: null, updatedAt: Date.now() });
+    p.items.push({ id: uid(), kind: "catalog", name: "Sample catalog", titles: "4 person camping tent waterproof\nmerino wool hiking socks\nstainless steel insulated water bottle 1l", params: ["product_type","attributes","categories"], updatedAt: Date.now() });
+    return { projects: [p], activeProject: p.id, activeItem: p.items[0].id, section: "request", apikey: "", remember: false, lang: "curl" };
+  }
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (raw) { const s = JSON.parse(raw); if (s && Array.isArray(s.projects) && s.projects.length) return s; }
+    } catch (e) {}
+    return seed();
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  const project = () => state.projects.find(p => p.id === state.activeProject) || state.projects[0];
+  const items = () => project().items;
+  const activeItem = () => items().find(i => i.id === state.activeItem) || null;
+
+  // ---------- rendering ----------
+  function render() {
+    const v = state.view || "playground";
+    document.querySelectorAll(".nav-item").forEach(b => b.setAttribute("aria-current", b.dataset.view === v ? "true" : "false"));
+    document.body.classList.toggle("view-full", v !== "playground");
+    renderAvatars();
+    if (v === "usage") renderUsage();
+    else if (v === "billing") renderBilling();
+    else if (v === "keys") renderKeys();
+    else { renderList(); renderWorkspace(); }
+    save();
+  }
+
+  function renderAvatars() {
+    const host = $("projAvatars"); host.innerHTML = "";
+    state.projects.forEach(p => {
+      const b = document.createElement("button");
+      b.className = "proj-avatar"; b.style.background = p.color;
+      b.textContent = p.name.trim().slice(0, 2).toUpperCase() || "P";
+      b.title = p.name;
+      b.setAttribute("aria-current", p.id === state.activeProject ? "true" : "false");
+      b.addEventListener("click", () => {
+        state.view = "playground";
+        state.activeProject = p.id;
+        const it = items(); state.activeItem = it.length ? it[0].id : null;
+        render();
+      });
+      host.appendChild(b);
+    });
+  }
+
+  function renderList() {
+    const p = project();
+    $("projName").textContent = p.name;
+    $("listDot").style.background = p.color;
+    $("listDot").textContent = p.name.trim().slice(0, 1).toUpperCase();
+    $("crumbProj").textContent = p.name;
+    document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-selected", b.dataset.sec === state.section ? "true" : "false"));
+    $("newItemLabel").textContent = state.section === "catalog" ? "Catalog" : "Request";
+
+    const q = ($("searchInput").value || "").toLowerCase().trim();
+    const list = $("itemList"); list.innerHTML = "";
+    const rows = items().filter(i => i.kind === state.section)
+      .filter(i => !q || (i.name + " " + (i.title || i.titles || "")).toLowerCase().includes(q))
+      .sort((a, b) => b.updatedAt - a.updatedAt);
+    if (!rows.length) {
+      const d = document.createElement("div"); d.className = "list-empty";
+      d.textContent = q ? "No matches." : (state.section === "catalog" ? "No catalogs yet. Create one to run parameters over a list of titles." : "No saved requests yet. Create one to start.");
+      list.appendChild(d); return;
+    }
+    rows.forEach(i => {
+      const btn = document.createElement("button");
+      btn.className = "item"; btn.setAttribute("aria-current", i.id === state.activeItem ? "true" : "false");
+      const sub = i.kind === "catalog"
+        ? (i.titles || "").split("\n").filter(Boolean).length + " titles · " + (i.params || []).length + " params"
+        : (i.title ? esc(i.title) : "no title") + " · " + (i.params || []).length + " params";
+      btn.innerHTML = '<div class="row1"><span class="kind ' + i.kind + '">' + (i.kind === "catalog" ? "cat" : "req") + '</span>'
+        + '<span class="name">' + esc(i.name) + '</span></div><div class="sub">' + sub + '</div>';
+      btn.addEventListener("click", () => { state.activeItem = i.id; document.body.classList.remove("list-open"); render(); });
+      list.appendChild(btn);
+    });
+  }
+
+  function paramGroupsHTML(selectedSet) {
+    return GROUPS.map(([name, params]) => {
+      const chks = params.map(pn => {
+        const slow = SLOW.has(pn) ? '<span class="tag">slow</span>' : '';
+        const ck = selectedSet.has(pn) ? ' checked' : '';
+        return '<label class="chk"><input type="checkbox" class="param" value="' + pn + '"' + ck + '><code>' + pn + '</code>' + slow + '</label>';
+      }).join("");
+      return '<fieldset class="pgroup"><legend>' + name + '</legend><div class="params">' + chks + '</div></fieldset>';
+    }).join("");
+  }
+
+  function renderWorkspace() {
+    const body = $("workBody");
+    const it = activeItem();
+    $("costPill").hidden = !it;
+    if (!it) {
+      $("crumbItem").textContent = "Welcome";
+      body.innerHTML = emptyHTML();
+      $("emptyNewReq").addEventListener("click", () => createItem("request"));
+      $("emptyNewCat").addEventListener("click", () => createItem("catalog"));
+      return;
+    }
+    $("crumbItem").textContent = it.name;
+    if (it.kind === "catalog") renderCatalog(it); else renderRequest(it);
+  }
+
+  function emptyHTML() {
+    return '<div class="empty">'
+      + '<div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10" stroke-linecap="round"/></svg></div>'
+      + '<h1>Build a request without the command line</h1>'
+      + '<p>Pick the parameters you want back from a product title, see the exact cost, and copy a ready-to-run request in eight languages. Save your work into projects and catalogs.</p>'
+      + '<div class="row"><button class="btn-primary" id="emptyNewReq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New request</button>'
+      + '<button class="btn-ghost" id="emptyNewCat">New catalog</button></div>'
+      + '</div>';
+  }
+
+  // ---------- shared bits ----------
+  const keyVal = () => (state.apikey || "").trim();
+  function bodyFor(it) { return { title: (it.title || "").trim(), parameters: (it.params || []).slice() }; }
+
+  function snippetFor(body, lang) {
+    const key = keyVal() || "YOUR_KEY";
+    const payload = JSON.stringify(body);
+    const url = API_URL + "/v1/title-matches";
+    const dq = payload.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    const sq = payload.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+    switch (lang) {
+      case "curl":
+        return 'curl -s ' + url + ' \\\n'
+          + '  -H "Authorization: Bearer ' + key + '" \\\n'
+          + '  -H "Content-Type: application/json" \\\n'
+          + '  -H "Idempotency-Key: $(uuidgen)" \\\n'
+          + "  -d '" + payload.replace(/'/g, "'\\''") + "'";
+      case "js":
+        return 'const res = await fetch("' + url + '", {\n'
+          + '  method: "POST",\n  headers: {\n'
+          + '    "Authorization": "Bearer ' + key + '",\n'
+          + '    "Content-Type": "application/json",\n'
+          + '    "Idempotency-Key": crypto.randomUUID()\n  },\n'
+          + '  body: JSON.stringify(' + payload + ')\n});\n'
+          + 'const data = await res.json();\nconsole.log(data);';
+      case "py":
+        return 'import requests, uuid\n\nres = requests.post(\n    "' + url + '",\n'
+          + '    headers={\n'
+          + '        "Authorization": "Bearer ' + key + '",\n'
+          + '        "Content-Type": "application/json",\n'
+          + '        "Idempotency-Key": uuid.uuid4().hex,\n    },\n'
+          + '    json=' + payload + ',\n    timeout=120,\n)\nprint(res.json())';
+      case "php":
+        return '<?php\n$ch = curl_init("' + url + '");\n'
+          + 'curl_setopt_array($ch, [\n    CURLOPT_RETURNTRANSFER => true,\n    CURLOPT_POST => true,\n'
+          + '    CURLOPT_HTTPHEADER => [\n        "Authorization: Bearer ' + key + '",\n'
+          + '        "Content-Type: application/json",\n        "Idempotency-Key: " . bin2hex(random_bytes(16)),\n    ],\n'
+          + "    CURLOPT_POSTFIELDS => '" + sq + "',\n]);\necho curl_exec($ch);";
+      case "ruby":
+        return 'require "net/http"\nrequire "securerandom"\n\nuri = URI("' + url + '")\n'
+          + 'req = Net::HTTP::Post.new(uri)\nreq["Authorization"] = "Bearer ' + key + '"\n'
+          + 'req["Content-Type"] = "application/json"\nreq["Idempotency-Key"] = SecureRandom.uuid\n'
+          + "req.body = '" + sq + "'\n\n"
+          + 'res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }\nputs res.body';
+      case "go":
+        return 'package main\n\nimport (\n\t"bytes"\n\t"fmt"\n\t"io"\n\t"net/http"\n\n\t"github.com/google/uuid"\n)\n\n'
+          + 'func main() {\n\tbody := []byte(`' + payload + '`)\n'
+          + '\treq, _ := http.NewRequest("POST", "' + url + '", bytes.NewReader(body))\n'
+          + '\treq.Header.Set("Authorization", "Bearer ' + key + '")\n'
+          + '\treq.Header.Set("Content-Type", "application/json")\n'
+          + '\treq.Header.Set("Idempotency-Key", uuid.NewString())\n'
+          + '\tres, _ := http.DefaultClient.Do(req)\n\tdefer res.Body.Close()\n'
+          + '\tout, _ := io.ReadAll(res.Body)\n\tfmt.Println(string(out))\n}';
+      case "java":
+        return 'import java.net.URI;\nimport java.net.http.*;\nimport java.util.UUID;\n\n'
+          + 'HttpClient client = HttpClient.newHttpClient();\n'
+          + 'HttpRequest req = HttpRequest.newBuilder()\n    .uri(URI.create("' + url + '"))\n'
+          + '    .header("Authorization", "Bearer ' + key + '")\n'
+          + '    .header("Content-Type", "application/json")\n'
+          + '    .header("Idempotency-Key", UUID.randomUUID().toString())\n'
+          + '    .POST(HttpRequest.BodyPublishers.ofString("' + dq + '"))\n    .build();\n'
+          + 'HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());\nSystem.out.println(res.body());';
+      case "csharp":
+        return 'using System;\nusing System.Net.Http;\nusing System.Text;\n\n'
+          + 'var client = new HttpClient();\n'
+          + 'var req = new HttpRequestMessage(HttpMethod.Post, "' + url + '");\n'
+          + 'req.Headers.Add("Authorization", "Bearer ' + key + '");\n'
+          + 'req.Headers.Add("Idempotency-Key", Guid.NewGuid().ToString());\n'
+          + 'req.Content = new StringContent("' + dq + '", Encoding.UTF8, "application/json");\n'
+          + 'var res = await client.SendAsync(req);\nConsole.WriteLine(await res.Content.ReadAsStringAsync());';
+      default: return "";
+    }
+  }
+
+  const LANGS = [["curl","curl"],["js","JavaScript"],["py","Python"],["php","PHP"],["ruby","Ruby"],["go","Go"],["java","Java"],["csharp","C#"]];
+  function tabsHTML() {
+    return '<div class="tabs" role="tablist">' + LANGS.map(([v, lab]) =>
+      '<button class="tab" role="tab" data-lang="' + v + '" aria-selected="' + (v === state.lang ? "true" : "false") + '">' + lab + '</button>').join("") + '</div>';
+  }
+  function keyFieldHTML() {
+    return '<div class="card"><div class="card-body">'
+      + '<label class="lbl" for="apikey">Your API key</label>'
+      + '<div class="keyrow"><div class="grow"><input class="in" id="apikey" type="password" placeholder="tca_..." autocomplete="off" spellcheck="false" value="' + esc(keyVal()) + '">'
+      + '<div class="hint">Sent only to the API as a Bearer token. <a href="https://intersect.reach.dog/developer" target="_blank" rel="noopener">Get a free key</a>.</div></div>'
+      + '<label class="remember"><input type="checkbox" id="remember"' + (state.remember ? " checked" : "") + '>Remember on this device</label></div>'
+      + '</div></div>';
+  }
+  function wireKeyField() {
+    const k = $("apikey"), r = $("remember");
+    if (!k) return;
+    k.addEventListener("input", () => { state.apikey = k.value; persistKey(); refreshCost(); updateSnippet(); });
+    r.addEventListener("change", () => { state.remember = r.checked; persistKey(); });
+  }
+  function persistKey() {
+    try {
+      if (state.remember && keyVal()) localStorage.setItem("rd_api_key", keyVal());
+      else localStorage.removeItem("rd_api_key");
+    } catch (e) {}
+    save();
+  }
+  function wireTabs() {
+    document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
+      state.lang = t.dataset.lang;
+      document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t ? "true" : "false"));
+      updateSnippet(); save();
+    }));
+  }
+  async function copyText(text, btn) {
+    try { await navigator.clipboard.writeText(text); const o = btn.textContent; btn.textContent = "Copied"; setTimeout(() => btn.textContent = o, 1400); }
+    catch (e) { const o = btn.textContent; btn.textContent = "Select the text to copy"; setTimeout(() => btn.textContent = o, 1800); }
+  }
+
+  // ---------- request view ----------
+  let refreshCost = () => {}, updateSnippet = () => {};
+  function renderRequest(it) {
+    const sel = new Set(it.params || []);
+    $("workBody").innerHTML =
+        '<div class="pane-split"><div class="ws-split"><div class="ws-main">'
+      + '<div class="card"><div class="card-head"><span class="eyebrow">Request</span>'
+      + '<input class="in" id="itemName" value="' + esc(it.name) + '" aria-label="Request name" style="max-width:280px;margin-left:auto;font-weight:600;">'
+      + '<button class="btn-ghost r" id="deleteItem" title="Delete">Delete</button></div>'
+      + '<div class="card-body"><div class="field"><label class="lbl" for="title">Product title</label>'
+      + '<input class="in" id="title" placeholder="e.g. 4 person camping tent waterproof" value="' + esc(it.title || "") + '"></div></div></div>'
+      + keyFieldHTML()
+      + '<div class="actions" style="margin:0 2px 16px;"><button class="btn-primary" id="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>Send request</button>'
+      + '<button class="btn-ghost" id="copyReq">Copy request</button></div>'
+      + '<div class="card" id="resultCard" hidden><div class="card-head"><span class="eyebrow">Response</span></div><div class="card-body">'
+      + '<div class="statusline" id="statusline"></div><pre class="output" id="output"></pre><div class="note" id="resultNote" hidden></div></div></div>'
+      + '<div class="card"><div class="card-head"><span class="eyebrow">Copy the request</span></div><div class="card-body">'
+      + tabsHTML() + '<div class="snipwrap"><button class="btn-ghost copy" id="copySnip">Copy</button><pre class="output" id="snippet"></pre></div>'
+      + '<div class="note infobox" style="margin-top:12px;">Running from a browser needs the API to allow cross-origin requests. Until that is on, <b>Send</b> falls back to showing the request so you can run it from your terminal or backend.</div>'
+      + '</div></div>'  // close snippet card-body + card
+      + '</div>'  // ws-main
+      + '<aside class="param-rail"><div class="param-rail-head">Parameters<span class="cnt" id="paramCount"></span></div><div class="param-rail-body">' + paramGroupsHTML(sel) + '</div></aside>'
+      + '</div></div>';
+
+    const nameEl = $("itemName"), titleEl = $("title");
+    nameEl.addEventListener("input", () => { it.name = nameEl.value || "Untitled"; it.updatedAt = Date.now(); renderList(); $("crumbItem").textContent = it.name; save(); });
+    titleEl.addEventListener("input", () => { it.title = titleEl.value; it.updatedAt = Date.now(); refreshCost(); updateSnippet(); renderList(); save(); });
+    document.querySelectorAll(".param").forEach(cb => cb.addEventListener("change", () => {
+      it.params = [...document.querySelectorAll(".param:checked")].map(c => c.value);
+      it.updatedAt = Date.now(); refreshCost(); updateSnippet(); renderList(); save();
+    }));
+    $("deleteItem").addEventListener("click", () => deleteItem(it.id));
+
+    refreshCost = function () {
+      const n = (it.params || []).length;
+      $("costParams").textContent = n;
+      $("costTokens").textContent = (n * PRICE).toLocaleString();
+      const pc = $("paramCount"); if (pc) pc.textContent = n + " selected";
+      const s = $("send"); if (s) s.disabled = n === 0 || !(it.title || "").trim();
+    };
+    updateSnippet = function () { const el = $("snippet"); if (el) el.textContent = snippetFor(bodyFor(it), state.lang); };
+
+    wireKeyField(); wireTabs();
+    $("copySnip").addEventListener("click", () => copyText(snippetFor(bodyFor(it), state.lang), $("copySnip")));
+    $("copyReq").addEventListener("click", () => copyText(JSON.stringify(bodyFor(it), null, 2), $("copyReq")));
+    $("send").addEventListener("click", () => sendRequest(it));
+    refreshCost(); updateSnippet();
+  }
+
+  async function sendRequest(it) {
+    const card = $("resultCard"), statusline = $("statusline"), out = $("output"), note = $("resultNote");
+    card.hidden = false; note.hidden = true; note.className = "note"; out.textContent = ""; statusline.innerHTML = "";
+    if (!keyVal()) {
+      statusline.innerHTML = '<span class="pill bad">no key</span>';
+      note.hidden = false; note.className = "note warnbox";
+      note.textContent = "Enter your API key above to send. You can create a free one from the Get a free key link.";
+      return;
+    }
+    const n = (it.params || []).length;
+    const send = $("send"); send.disabled = true; send.textContent = "Sending...";
+    const t0 = performance.now();
+    try {
+      const res = await fetch(FETCH_BASE + "/v1/title-matches", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + keyVal(), "Content-Type": "application/json", "Idempotency-Key": crypto.randomUUID() },
+        body: JSON.stringify(bodyFor(it)),
+      });
+      const ms = Math.round(performance.now() - t0);
+      let data; try { data = await res.json(); } catch (e) { data = await res.text(); }
+      statusline.innerHTML = '<span class="pill ' + (res.ok ? "ok" : "bad") + '">' + res.status + '</span>'
+        + '<span class="meta">' + ms + ' ms</span>'
+        + '<span class="meta">' + n + ' parameters, about ' + (n * PRICE).toLocaleString() + ' tokens</span>';
+      out.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+      it.response = (typeof data === "string" ? data : JSON.stringify(data)); save();
+    } catch (err) {
+      statusline.innerHTML = '<span class="pill bad">blocked</span>';
+      note.hidden = false; note.className = "note warnbox";
+      note.innerHTML = "The browser could not reach the API directly. Sending from a web page needs the API to allow browser requests (CORS), which is not enabled yet. Until it is, copy the request below and run it from a terminal. Your request is ready there.";
+      out.textContent = snippetFor(bodyFor(it), state.lang);
+    } finally {
+      send.disabled = false; send.textContent = "Send request"; refreshCost();
+    }
+  }
+
+  // ---------- catalog view ----------
+  function renderCatalog(it) {
+    const sel = new Set(it.params || []);
+    $("workBody").innerHTML =
+        '<div class="pane-split"><div class="ws-split"><div class="ws-main">'
+      + '<div class="card"><div class="card-head"><span class="eyebrow">Catalog</span>'
+      + '<input class="in" id="itemName" value="' + esc(it.name) + '" aria-label="Catalog name" style="max-width:280px;margin-left:auto;font-weight:600;">'
+      + '<button class="btn-ghost r" id="deleteItem" title="Delete">Delete</button></div>'
+      + '<div class="card-body"><div class="field"><label class="lbl" for="titles">Product titles, one per line</label>'
+      + '<textarea class="in" id="titles" placeholder="4 person camping tent waterproof&#10;merino wool hiking socks&#10;stainless steel water bottle 1l">' + esc(it.titles || "") + '</textarea>'
+      + '<div class="hint" id="titleCount"></div></div></div></div>'
+      + '<div class="card"><div class="card-head"><span class="eyebrow">Run the catalog</span></div><div class="card-body">'
+      + '<div class="note infobox" style="margin-top:0;">Batch and catalog-grouping routes run on server keys, so a developer key runs titles one at a time. This builds a ready loop you run from your backend. Catalog cost shown is titles × parameters × ' + PRICE + ' tokens.</div>'
+      + '<div style="margin:14px 0 2px;">' + tabsHTML() + '</div>'
+      + '<div class="snipwrap"><button class="btn-ghost copy" id="copySnip">Copy</button><pre class="output" id="snippet"></pre></div>'
+      + '</div></div>'
+      + '</div>'  // ws-main
+      + '<aside class="param-rail"><div class="param-rail-head">Parameters<span class="cnt" id="paramCount"></span></div><div class="param-rail-body">' + paramGroupsHTML(sel) + '</div></aside>'
+      + '</div></div>';
+
+    const nameEl = $("itemName"), ta = $("titles");
+    const titlesArr = () => (ta.value || "").split("\n").map(s => s.trim()).filter(Boolean);
+    function refresh() {
+      const nt = titlesArr().length, np = (it.params || []).length;
+      $("titleCount").textContent = nt + " title" + (nt === 1 ? "" : "s") + " · " + np + " params each";
+      const pc = $("paramCount"); if (pc) pc.textContent = np + " selected";
+      $("costParams").textContent = (nt * np).toLocaleString();
+      $("costTokens").textContent = (nt * np * PRICE).toLocaleString();
+      $("snippet").textContent = catalogSnippet(titlesArr(), it.params || [], state.lang);
+    }
+    nameEl.addEventListener("input", () => { it.name = nameEl.value || "Untitled"; it.updatedAt = Date.now(); renderList(); $("crumbItem").textContent = it.name; save(); });
+    ta.addEventListener("input", () => { it.titles = ta.value; it.updatedAt = Date.now(); refresh(); renderList(); save(); });
+    document.querySelectorAll(".param").forEach(cb => cb.addEventListener("change", () => {
+      it.params = [...document.querySelectorAll(".param:checked")].map(c => c.value);
+      it.updatedAt = Date.now(); refresh(); renderList(); save();
+    }));
+    $("deleteItem").addEventListener("click", () => deleteItem(it.id));
+    wireTabs();
+    $("copySnip").addEventListener("click", () => copyText(catalogSnippet(titlesArr(), it.params || [], state.lang), $("copySnip")));
+    refresh();
+  }
+
+  function catalogSnippet(titles, params, lang) {
+    const key = keyVal() || "YOUR_KEY";
+    const url = API_URL + "/v1/title-matches";
+    const titlesJson = JSON.stringify(titles.length ? titles : ["<title 1>", "<title 2>"]);
+    const paramsJson = JSON.stringify(params.length ? params : ["product_type"]);
+    switch (lang) {
+      case "py":
+        return 'import requests, uuid, json\n\n'
+          + 'TITLES = ' + JSON.stringify(titles.length ? titles : ["<title 1>", "<title 2>"], null, 2) + '\n'
+          + 'PARAMS = ' + paramsJson + '\n\n'
+          + 'for title in TITLES:\n'
+          + '    res = requests.post(\n        "' + url + '",\n'
+          + '        headers={\n'
+          + '            "Authorization": "Bearer ' + key + '",\n'
+          + '            "Content-Type": "application/json",\n'
+          + '            "Idempotency-Key": uuid.uuid4().hex,\n        },\n'
+          + '        json={"title": title, "parameters": PARAMS},\n        timeout=120,\n    )\n'
+          + '    print(title, "->", json.dumps(res.json()))';
+      case "js":
+        return 'const TITLES = ' + titlesJson + ';\nconst PARAMS = ' + paramsJson + ';\n\n'
+          + 'for (const title of TITLES) {\n'
+          + '  const res = await fetch("' + url + '", {\n'
+          + '    method: "POST",\n'
+          + '    headers: {\n'
+          + '      "Authorization": "Bearer ' + key + '",\n'
+          + '      "Content-Type": "application/json",\n'
+          + '      "Idempotency-Key": crypto.randomUUID()\n    },\n'
+          + '    body: JSON.stringify({ title, parameters: PARAMS })\n  });\n'
+          + '  console.log(title, await res.json());\n}';
+      case "ruby":
+        return 'require "net/http"\nrequire "securerandom"\nrequire "json"\n\n'
+          + 'TITLES = ' + titlesJson + '\nPARAMS = ' + paramsJson + '\nuri = URI("' + url + '")\n\n'
+          + 'TITLES.each do |title|\n'
+          + '  req = Net::HTTP::Post.new(uri)\n'
+          + '  req["Authorization"] = "Bearer ' + key + '"\n'
+          + '  req["Content-Type"] = "application/json"\n'
+          + '  req["Idempotency-Key"] = SecureRandom.uuid\n'
+          + '  req.body = { title: title, parameters: PARAMS }.to_json\n'
+          + '  res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(req) }\n'
+          + '  puts "#{title} -> #{res.body}"\nend';
+      case "php":
+        return '<?php\n$titles = ' + phpArr(titles.length ? titles : ["<title 1>", "<title 2>"]) + ';\n'
+          + '$params = ' + phpArr(params.length ? params : ["product_type"]) + ';\n\n'
+          + 'foreach ($titles as $title) {\n'
+          + '    $ch = curl_init("' + url + '");\n'
+          + '    curl_setopt_array($ch, [\n        CURLOPT_RETURNTRANSFER => true,\n        CURLOPT_POST => true,\n'
+          + '        CURLOPT_HTTPHEADER => [\n            "Authorization: Bearer ' + key + '",\n'
+          + '            "Content-Type: application/json",\n            "Idempotency-Key: " . bin2hex(random_bytes(16)),\n        ],\n'
+          + '        CURLOPT_POSTFIELDS => json_encode(["title" => $title, "parameters" => $params]),\n    ]);\n'
+          + '    echo $title . " -> " . curl_exec($ch) . "\\n";\n    curl_close($ch);\n}';
+      case "go":
+        return '// One request per title. Reuse http.DefaultClient; add retry/backoff for production.\n'
+          + 'titles := []string' + goArr(titles.length ? titles : ["<title 1>", "<title 2>"]) + '\n'
+          + 'params := []string' + goArr(params.length ? params : ["product_type"]) + '\n'
+          + 'for _, title := range titles {\n'
+          + '\tbody, _ := json.Marshal(map[string]any{"title": title, "parameters": params})\n'
+          + '\treq, _ := http.NewRequest("POST", "' + url + '", bytes.NewReader(body))\n'
+          + '\treq.Header.Set("Authorization", "Bearer ' + key + '")\n'
+          + '\treq.Header.Set("Content-Type", "application/json")\n'
+          + '\treq.Header.Set("Idempotency-Key", uuid.NewString())\n'
+          + '\tres, _ := http.DefaultClient.Do(req)\n\t_ = res // read + close res.Body\n}';
+      case "java":
+        return '// One request per title with HttpClient.\n'
+          + 'List<String> titles = List.of(' + javaList(titles.length ? titles : ["<title 1>", "<title 2>"]) + ');\n'
+          + 'List<String> params = List.of(' + javaList(params.length ? params : ["product_type"]) + ');\n'
+          + 'HttpClient client = HttpClient.newHttpClient();\n'
+          + 'for (String title : titles) {\n'
+          + '    String body = "{\\"title\\":\\"" + title + "\\",\\"parameters\\":...}"; // serialize with your JSON lib\n'
+          + '    HttpRequest req = HttpRequest.newBuilder()\n        .uri(URI.create("' + url + '"))\n'
+          + '        .header("Authorization", "Bearer ' + key + '")\n'
+          + '        .header("Content-Type", "application/json")\n'
+          + '        .header("Idempotency-Key", UUID.randomUUID().toString())\n'
+          + '        .POST(HttpRequest.BodyPublishers.ofString(body)).build();\n'
+          + '    client.send(req, HttpResponse.BodyHandlers.ofString());\n}';
+      case "csharp":
+        return '// One request per title with HttpClient.\n'
+          + 'string[] titles = ' + csArr(titles.length ? titles : ["<title 1>", "<title 2>"]) + ';\n'
+          + 'string[] parameters = ' + csArr(params.length ? params : ["product_type"]) + ';\n'
+          + 'var client = new HttpClient();\n'
+          + 'foreach (var title in titles) {\n'
+          + '    var payload = JsonSerializer.Serialize(new { title, parameters });\n'
+          + '    var req = new HttpRequestMessage(HttpMethod.Post, "' + url + '");\n'
+          + '    req.Headers.Add("Authorization", "Bearer ' + key + '");\n'
+          + '    req.Headers.Add("Idempotency-Key", Guid.NewGuid().ToString());\n'
+          + '    req.Content = new StringContent(payload, Encoding.UTF8, "application/json");\n'
+          + '    await client.SendAsync(req);\n}';
+      default: // curl
+        return '# One request per title. Add your own loop in a shell script.\n'
+          + (titles.length ? titles : ["<title 1>", "<title 2>"]).map(t =>
+              'curl -s ' + url + ' \\\n'
+              + '  -H "Authorization: Bearer ' + key + '" \\\n'
+              + '  -H "Content-Type: application/json" \\\n'
+              + '  -H "Idempotency-Key: $(uuidgen)" \\\n'
+              + "  -d '" + JSON.stringify({ title: t, parameters: params.length ? params : ["product_type"] }).replace(/'/g, "'\\''") + "'"
+            ).join("\n\n");
+    }
+  }
+  const phpArr = a => '[' + a.map(s => '"' + s.replace(/"/g, '\\"') + '"').join(", ") + ']';
+  const goArr = a => '{' + a.map(s => '"' + s.replace(/"/g, '\\"') + '"').join(", ") + '}';
+  const javaList = a => a.map(s => '"' + s.replace(/"/g, '\\"') + '"').join(", ");
+  const csArr = a => '{ ' + a.map(s => '"' + s.replace(/"/g, '\\"') + '"').join(", ") + ' }';
+
+  // ---------- actions ----------
+  function createItem(kind) {
+    state.section = kind;
+    const base = kind === "catalog"
+      ? { id: uid(), kind, name: "New catalog", titles: "", params: ["product_type","attributes","categories"], updatedAt: Date.now() }
+      : { id: uid(), kind, name: "New request", title: "", params: DEFAULTS.slice(), response: null, updatedAt: Date.now() };
+    items().unshift(base); state.activeItem = base.id; render();
+  }
+  function deleteItem(id) {
+    const arr = items(); const idx = arr.findIndex(i => i.id === id);
+    if (idx >= 0) arr.splice(idx, 1);
+    const rest = items().filter(i => i.kind === state.section);
+    state.activeItem = rest.length ? rest[0].id : (items()[0] ? items()[0].id : null);
+    render();
+  }
+  function addProject() {
+    const name = (prompt("Project name") || "").trim();
+    if (!name) return;
+    const p = blankProject(name); state.projects.push(p);
+    state.view = "playground"; state.activeProject = p.id; state.activeItem = null; render();
+  }
+  function renameProject() {
+    const p = project(); const name = (prompt("Rename project", p.name) || "").trim();
+    if (name) { p.name = name; render(); }
+  }
+
+  // ---------- console dashboards (Usage / Billing / API keys) ----------
+  // Live numbers (balance, price, daily limit) come from GET /v1/usage when a key
+  // is present and reachable. Charts, history and invoices are LABELLED example
+  // data: layout for the build, not real records.
+  const nf = n => (n == null ? "—" : Number(n).toLocaleString());
+  function dashTop(label) { $("crumbProj").textContent = "Console"; $("crumbItem").textContent = label; $("costPill").hidden = true; }
+
+  async function fetchUsage() {
+    if (!keyVal()) return { live: false, reason: "no-key" };
+    try {
+      const res = await fetch(FETCH_BASE + "/v1/usage", { headers: { "Authorization": "Bearer " + keyVal() } });
+      if (!res.ok) return { live: false, reason: "http-" + res.status };
+      return { live: true, data: await res.json() };
+    } catch (e) { return { live: false, reason: "blocked" }; }
+  }
+  // Pull the fields we display, tolerant of shape differences.
+  function readUsage(d) {
+    d = d || {};
+    const price = d.parameter_price ?? d.price ?? PRICE;
+    const balance = d.balance ?? d.tokens ?? (d.wallet && d.wallet.balance) ?? null;
+    const dailyLimit = d.daily_title_limit ?? d.daily_limit ?? 10000;
+    const dailyUsed = d.daily_used ?? d.used_today ?? null;
+    return { price, balance, dailyLimit, dailyUsed };
+  }
+  const EXAMPLE_DAILY = [120,340,90,560,430,210,680,540,300,770,610,450,820,690]; // tokens/day, example
+  function barsHTML(series) {
+    const max = Math.max(...series, 1);
+    return '<div class="bars">' + series.map((v, i) =>
+      '<div class="bar" title="' + nf(v) + ' tokens"><div class="fill" style="height:' + Math.round(v / max * 100) + '%"></div>'
+      + '<div class="d">' + (i % 2 ? "" : "d" + (i + 1)) + '</div></div>').join("") + '</div>';
+  }
+
+  function renderUsage() {
+    dashTop("Usage");
+    $("workBody").innerHTML =
+        '<div class="dash"><div class="dash-head"><div><h1>Usage</h1>'
+      + '<div class="sub">Token consumption and your free daily allowance.</div></div>'
+      + '<div class="r"><span class="badge eg" id="usageSrc">example data</span>'
+      + '<button class="btn-ghost" id="usageRefresh">Refresh from /v1/usage</button></div></div>'
+      + '<div class="tiles">'
+      + '<div class="tile"><div class="k">Token balance</div><div class="v" id="uBal">—</div><div class="s">available to spend</div></div>'
+      + '<div class="tile"><div class="k">Free today</div><div class="v" id="uFree">—</div><div class="s">resets every 24h</div></div>'
+      + '<div class="tile"><div class="k">Price</div><div class="v" id="uPrice">25</div><div class="s">tokens / parameter, billed on success</div></div>'
+      + '<div class="tile"><div class="k">Spent (30d)</div><div class="v">32,480</div><div class="s">example</div></div>'
+      + '</div>'
+      + '<div class="panel"><div class="panel-head"><h2>Tokens per day</h2><span class="badge eg">example</span></div>'
+      + '<div class="panel-body">' + barsHTML(EXAMPLE_DAILY) + '</div></div>'
+      + '<div class="panel"><div class="panel-head"><h2>By endpoint</h2><span class="badge eg">example</span></div>'
+      + '<div class="panel-body" style="padding:0"><table class="dtable"><thead><tr><th>Endpoint</th><th class="r">Calls</th><th class="r">Parameters</th><th class="r">Tokens</th></tr></thead><tbody>'
+      + '<tr><td><code>/v1/title-matches</code></td><td class="r">1,240</td><td class="r">4,960</td><td class="r">124,000</td></tr>'
+      + '<tr><td><code>/v1/market-research</code></td><td class="r">180</td><td class="r">540</td><td class="r">13,500</td></tr>'
+      + '<tr><td><code>/v1/content-generations</code></td><td class="r">64</td><td class="r">128</td><td class="r">3,200</td></tr>'
+      + '</tbody></table></div></div>'
+      + '<div class="note infobox">Balance, price and the daily free limit are live from <code>/v1/usage</code> when a key is set. The chart and per-endpoint breakdown are example layout, a per-call usage log is the backend piece to build (see handoff).</div>'
+      + '</div>';
+    $("usageRefresh").addEventListener("click", loadUsage);
+    loadUsage();
+  }
+  async function loadUsage() {
+    const u = await fetchUsage(), badge = $("usageSrc");
+    if (u.live) {
+      const r = readUsage(u.data);
+      if ($("uBal")) $("uBal").textContent = nf(r.balance);
+      if ($("uPrice")) $("uPrice").textContent = nf(r.price);
+      if ($("uFree")) $("uFree").textContent = r.dailyUsed != null ? nf(Math.max(0, r.dailyLimit - r.dailyUsed)) : nf(r.dailyLimit);
+      if (badge) { badge.textContent = "live"; badge.className = "badge live"; }
+    } else if (badge) {
+      badge.textContent = u.reason === "no-key" ? "set a key for live data" : "example data";
+      badge.className = "badge eg";
+      if ($("uFree")) $("uFree").textContent = "10,000";
+    }
+  }
+
+  function renderBilling() {
+    dashTop("Billing");
+    $("workBody").innerHTML =
+        '<div class="dash"><div class="dash-head"><div><h1>Billing</h1>'
+      + '<div class="sub">Your token balance, pricing, and top-ups.</div></div>'
+      + '<div class="r"><span class="badge eg" id="billSrc">example data</span></div></div>'
+      + '<div class="tiles">'
+      + '<div class="tile"><div class="k">Current balance</div><div class="v" id="bBal">—</div><div class="s">tokens</div></div>'
+      + '<div class="tile"><div class="k">Free tier</div><div class="v">10,000</div><div class="s">tokens / 24h, auto-refilled</div></div>'
+      + '<div class="tile"><div class="k">Price</div><div class="v">25</div><div class="s">tokens / parameter</div></div>'
+      + '</div>'
+      + '<div class="panel"><div class="panel-head"><h2>Add tokens</h2><span class="badge eg">checkout to wire</span></div>'
+      + '<div class="panel-body"><div class="creditgrid">'
+      + ['10','25','50','100'].map(d => '<button class="credit" disabled><div class="amt">$' + d + '</div><div class="tok">' + nf(d * 10000) + ' tokens</div></button>').join("")
+      + '</div><div class="note infobox" style="margin-top:14px;">Top-ups run through the billing service. The buttons are the layout, connect them to that checkout to go live.</div></div></div>'
+      + '<div class="panel"><div class="panel-head"><h2>Settings</h2></div><div class="panel-body">'
+      + '<div class="switchrow"><div class="txt"><div class="t">Auto-reload</div><div class="d2">Buy more tokens automatically when the balance runs low.</div></div><div class="r"><label class="remember"><input type="checkbox" disabled> Off</label></div></div>'
+      + '<div class="switchrow"><div class="txt"><div class="t">Monthly spend limit</div><div class="d2">Stop spending past a cap each month.</div></div><div class="r"><input class="in" style="width:120px" placeholder="$ none" disabled></div></div>'
+      + '</div></div>'
+      + '<div class="panel"><div class="panel-head"><h2>History</h2><span class="badge eg">example</span></div>'
+      + '<div class="panel-body" style="padding:0"><table class="dtable"><thead><tr><th>Date</th><th>Description</th><th class="r">Tokens</th><th class="r">Amount</th></tr></thead><tbody>'
+      + '<tr><td>2026-10-01</td><td>Token top-up</td><td class="r">+500,000</td><td class="r">$50.00</td></tr>'
+      + '<tr><td>2026-09-01</td><td>Token top-up</td><td class="r">+250,000</td><td class="r">$25.00</td></tr>'
+      + '</tbody></table></div></div>'
+      + '<div class="note infobox">Balance and price are live from <code>/v1/usage</code> with a key set. Checkout, auto-reload, spend limits and invoice history are the billing-service pieces to build (see handoff).</div>'
+      + '</div>';
+    (async () => {
+      const u = await fetchUsage(), badge = $("billSrc");
+      if (u.live) { const r = readUsage(u.data); if ($("bBal")) $("bBal").textContent = nf(r.balance); if (badge) { badge.textContent = "balance: live"; badge.className = "badge live"; } }
+      else if (badge) { badge.textContent = u.reason === "no-key" ? "set a key for live balance" : "example data"; }
+    })();
+  }
+
+  function renderKeys() {
+    dashTop("API keys");
+    const k = keyVal();
+    const mask = k ? (k.slice(0, 7) + "…" + k.slice(-4)) : "no key set in this session";
+    $("workBody").innerHTML =
+        '<div class="dash"><div class="dash-head"><div><h1>API keys</h1>'
+      + '<div class="sub">Keys authenticate every request as <code>Authorization: Bearer &lt;key&gt;</code>.</div></div>'
+      + '<div class="r"><a class="btn-primary" href="https://intersect.reach.dog/developer" target="_blank" rel="noopener">Create a key</a></div></div>'
+      + '<div class="panel"><div class="panel-head"><h2>Your keys</h2></div><div class="panel-body" style="padding:0">'
+      + '<table class="dtable"><thead><tr><th>Key</th><th>Label</th><th>Created</th><th>Last used</th><th class="r"></th></tr></thead><tbody>'
+      + '<tr><td class="keymask">' + esc(mask) + '</td><td>This session</td><td>—</td><td>just now</td><td class="r">' + (k ? '<button class="btn-ghost" id="copyKey">Copy</button>' : '') + '</td></tr>'
+      + '<tr><td class="keymask">tca_9f31…a7c2</td><td>Production</td><td>2026-09-12</td><td>2026-10-08</td><td class="r"><span class="badge eg">example</span></td></tr>'
+      + '</tbody></table></div></div>'
+      + '<div class="note infobox">Keys are created and revoked in the developer portal (<a href="https://intersect.reach.dog/developer" target="_blank" rel="noopener">intersect.reach.dog/developer</a>). The session row reflects the key you entered in the Playground. The second row is example layout; wire this table to the key-management endpoint to list and revoke real keys (see handoff).</div>'
+      + '</div>';
+    if (k) { const c = $("copyKey"); if (c) c.addEventListener("click", () => copyText(k, c)); }
+  }
+
+  // ---------- theme ----------
+  function applyTheme() {
+    const t = state.theme;
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    else document.documentElement.removeAttribute("data-theme");
+  }
+  function cycleTheme() {
+    state.theme = state.theme === "dark" ? "light" : state.theme === "light" ? "system" : "dark";
+    applyTheme(); save();
+  }
+
+  // ---------- boot ----------
+  state = load();
+  if (!state.theme) state.theme = "system";
+  if (!state.lang) state.lang = "curl";
+  if (!state.view) state.view = "playground";
+  try { const sk = localStorage.getItem("rd_api_key"); if (sk && !state.apikey) { state.apikey = sk; state.remember = true; } } catch (e) {}
+  applyTheme();
+
+  document.querySelectorAll(".nav-item").forEach(b => b.addEventListener("click", () => {
+    state.view = b.dataset.view; document.body.classList.remove("list-open"); render();
+  }));
+  $("addProjectTop").addEventListener("click", addProject);
+  $("renameProject").addEventListener("click", renameProject);
+  $("themeBtn").addEventListener("click", cycleTheme);
+  $("newItem").addEventListener("click", () => createItem(state.section));
+  $("searchInput").addEventListener("input", renderList);
+  document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+    state.section = b.dataset.sec;
+    const rows = items().filter(i => i.kind === state.section);
+    if (rows.length && !rows.some(i => i.id === state.activeItem)) state.activeItem = rows[0].id;
+    render();
+  }));
+  $("menuToggle").addEventListener("click", () => document.body.classList.toggle("list-open"));
+  $("scrim").addEventListener("click", () => document.body.classList.remove("list-open"));
+
+  render();
+})();
+</script>
+</body>
+</html>
