@@ -6,12 +6,12 @@ This page is the full reference. If you just want to make a first call, start wi
 
 - Base URL: `https://title-cluster-api-221381283627.us-east1.run.app`
 - Current contract: OpenAPI `0.2.0`, schema `2026-09-30.4` (see [Versioning](#versioning))
-- Get a key: https://intersect.reach.dog/developer
+- Get a key: https://platform.reach.dog/keys
 
 ## Contents
 
 1. [Authentication](#authentication)
-2. [Pricing and the free tier](#pricing-and-the-free-tier)
+2. [Pricing and account access](#pricing-and-account-access)
 3. [Request basics](#request-basics)
 4. [Endpoints](#endpoints)
 5. [Parameters](#parameters)
@@ -29,16 +29,21 @@ Every request needs a bearer key:
 Authorization: Bearer <your_key>
 ```
 
-Create a key at https://intersect.reach.dog/developer by signing in with Google. A new key can call the title, research and content endpoints. Batch and catalog-grouping are not part of the developer offering (see [Endpoints](#endpoints)). Keep keys out of source control and client-side code.
+Create a key at https://platform.reach.dog/keys by signing in using the console's
+available options and completing its wallet/key setup. New customer keys normally
+include `match`, `read`, `research` and `content`; check your actual key's scopes.
+Funded, bound wallet accounts can also submit the catalog workflow described
+below using `match` or `batch` scope. Keep keys out of source control and
+client-side code.
 
 A missing or invalid key returns `401 invalid_key`.
 
-## Pricing and the free tier
+## Pricing and account access
 
-- You pay per requested parameter. At current pricing each parameter costs **25 tokens**, so a three-parameter request costs 75 tokens. There is no base fee.
+- Single-title calls are priced per requested parameter, with no base fee. Read the current `parameter_price` from `GET /v1/usage`. Catalog calls price each selected output once per catalog call, regardless of title count; read the returned quote before accepting.
 - Billing is success only. A correct answer with an empty value (`null` or `[]`) still counts as a success and is billed. A failed request (validation error, an unavailable source, a dependency failure) is not billed.
-- Every account has a **free daily allowance of about 10,000 tokens** (roughly 400 single-parameter calls at current pricing), refreshed every 24 hours. You can evaluate the whole API without adding funds.
-- Check your balance and limits any time with [`GET /v1/usage`](#get-v1usage). Pricing and the allowance can change, so treat `/v1/usage` and the access page as the source of truth, not this number.
+- Eligibility and credits are account-specific; no universal free allowance is promised. GitHub sign-in provides the console's eligible API/recipe evaluation path. Google/email console testing requires purchased wallet credits. That console gate is distinct from direct API-key requests, which use the key's scopes, account access and wallet balance.
+- Check your balance, current price and limits with [`GET /v1/usage`](#get-v1usage) and the console. Wallet credits are Reach Dog billing units, not provider model tokens.
 
 ## Request basics
 
@@ -60,8 +65,16 @@ A missing or invalid key returns `401 invalid_key`.
 | `GET /v1/content-generations/{id}` | Fetch a saved content result. |
 | `GET /v1/usage` | Your balance, price, daily limit and refill time. |
 | `GET /v1/versions` | Dataset, schema and matcher versions. |
+| `POST /v1/batches` with `workflow: "catalog_local_v1"` | Submit a catalog and receive its quote. Requires a bound shared wallet and match or batch scope. |
+| `POST /v1/batches/{id}/accept` | Accept the catalog quote and start the existing workflow. |
+| `GET /v1/batches/{id}` and `/results` | Read owned catalog status and paginated results; read scope required. |
 
-Batch (`/v1/batches`) and catalog grouping (`/v1/catalog-groups`) exist in the API but are not available to developer keys. They answer `403 insufficient_scope`. Do not build against them.
+The catalog workflow accepts 1-500 submitted titles; the console demo allows
+100 records. Use output names and save the returned ID and acceptance value.
+Follow the [catalog workflow guide](https://platform.reach.dog/docs/catalog-workflow)
+for the request body, acceptance, polling, pagination, cancellation and payment
+recovery. Access to this workflow does not open the unrelated legacy title-batch
+or `/v1/catalog-groups` routes.
 
 ### POST /v1/title-matches
 
@@ -183,7 +196,7 @@ Content is never published, and it does not invent prices, specifications or per
 
 ## Parameters
 
-Request any mix of parameters in one call. Each belongs to one endpoint family. The table marks availability: **live** works today, **source pending** returns `503 source_unavailable` until its data source ships, and **not for dev keys** is blocked for developer keys.
+Request parameters supported by the endpoint and subject. The table marks availability: **live** is supported, while **source pending** indicates an unavailable source. Catalog outputs use the separate workflow described below; their access is not a blanket developer-key restriction.
 
 ### Title: product understanding
 
@@ -277,9 +290,15 @@ Observed metrics attached to keyword records. Numbers are search metrics, not sa
 | 50 | `content_drafts` | live |
 | 51 | `first_test` | live |
 
-### Not available to developer keys
+### Catalog workflow outputs
 
-Parameters 52 to 59 (`catalog_summary`, `catalog_dimension_summary`, `catalog_groups`, `group_members`, `ungrouped_items`, `keyword_competition_distribution`, `catalog_distinctive_themes`, `attribute_coverage`) belong to the batch and grouping endpoints and are blocked for developer keys.
+For `catalog_local_v1`, register IDs 52 (`catalog_summary`), 54 (`catalog_groups`),
+55 (`group_members`) and 56 (`ungrouped_items`) are selectable. It also supports
+the named outputs `catalog_products`, `catalog_briefing`, `catalog_questions`,
+`catalog_ghost_opportunities`, `catalog_keyword_opportunities` and
+`catalog_content_ideas`, which have no IDs in 52-59. IDs 53, 57, 58 and 59 are
+not selectable in this workflow. Use the catalog guide's supported output names;
+do not infer access to legacy group routes from a registered parameter.
 
 ## Response model
 
@@ -315,7 +334,7 @@ Branch on `code`, not on the HTTP status alone. Keep the `request_id` for suppor
 |---|---|---|
 | 401 | `invalid_key` | Missing or bad key. Check the `Authorization` header. |
 | 402 | insufficient credits | Wallet is empty. Wait for the daily refill or add funds. |
-| 403 | `insufficient_scope` | The route is not available to your key (batch and grouping). Do not retry. |
+| 403 | `insufficient_scope` | Your key lacks a required scope. Check the route's scopes; retry only after access is corrected. |
 | 409 | `idempotency_conflict` | Same `Idempotency-Key` with a different body. Use a new key for a new request. |
 | 410 | `expired` | The saved idempotent operation aged out. Send a fresh request with a new key. |
 | 422 | `invalid_request` and related | Validation failed: unknown parameter, wrong endpoint for a parameter, empty selection, a parameter missing its prerequisite (`unsupported_subject_selection`, `unsupported_content_source`, `keywords_required`, `unsupported_market`). Fix the request. |
