@@ -337,7 +337,7 @@ Branch on `code`, not on the HTTP status alone. Keep the `request_id` for suppor
 | 402 | insufficient credits | Wallet is empty. Wait for the daily refill or add funds. |
 | 403 | `insufficient_scope` | Your key lacks a required scope. Check the route's scopes; retry only after access is corrected. |
 | 409 | `idempotency_conflict` | Same `Idempotency-Key` with a different body. Use a new key for a new request. |
-| 410 | `expired` | The saved idempotent operation aged out. Send a fresh request with a new key. |
+| 410 | `expired` | The saved operation expired. A fresh request with a new key creates new work and can charge again; do this only if regeneration is intended. |
 | 422 | `invalid_request` and related | Validation failed: unknown parameter, wrong endpoint for a parameter, empty selection, a parameter missing its prerequisite (`unsupported_subject_selection`, `unsupported_content_source`, `keywords_required`, `unsupported_market`). Fix the request. |
 | 429 | rate limited | Daily title limit reached. See `api_limit_resets_at` from `/v1/usage`. |
 | 503 | `source_unavailable` | The parameter has no verified source yet. Not billed. |
@@ -347,7 +347,8 @@ Branch on `code`, not on the HTTP status alone. Keep the `request_id` for suppor
 
 - Send an `Idempotency-Key` on every `POST`. Repeating the same key with the same body returns the saved answer with no new work and no new charge, for as long as the saved operation lives.
 - The same key with a different body is a conflict (`409`).
-- A saved operation expires after about a day. After that a repeat is new work (`410` on the stale key; send a fresh request).
+- Single-title, research and content results normally remain readable for 24 hours. Batch and catalog jobs normally remain readable for 7 days. Use the operation's `expires_at` for its actual expiry; successful catalog delivery or definitive payment refusal starts a fresh job-retention interval, and uncertain settlement postpones expiry.
+- During the 24-hour tombstone interval after expiry, the same key returns `410 expired`, not a new answer. Database cleanup is asynchronous. Once the record is purged, even the same key can create new work and charge again. A fresh key also creates new work; use one only when regeneration is intended.
 - `GET /v1/{resource}/{id}` reads a saved result with no model call and no charge. Use the `Location` header from a `POST` to find the saved id.
 
 ## Performance
