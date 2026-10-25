@@ -5,7 +5,7 @@ Turn a product title into structured product data: product type, attributes, cat
 This repository holds working, runnable examples for integrating the Reach Dog Title and Cluster API. The service implementation is private; everything here is client-side example code you can run against the live API with your own key.
 
 - Live demo: https://huggingface.co/spaces/ReachDog/product-classification-api-demo
-- Get a key: https://intersect.reach.dog/developer
+- Get a key: https://platform.reach.dog/keys
 - Developer reference: [docs/api-reference.md](docs/api-reference.md)
 - Changelog: [docs/changelog.md](docs/changelog.md)
 - API reference (OpenAPI): https://title-cluster-api-221381283627.us-east1.run.app/openapi.json
@@ -100,20 +100,21 @@ An empty result is a successful, billable answer. It means the API looked and th
 { "code": "unsupported_market", "message": "Title taxonomy sources do not support a market filter.", "retryable": false }
 ```
 
-**Batch and catalog-grouping routes are not open to standard keys.** They return:
-
-```json
-{ "code": "insufficient_scope", "message": "The group scope is required.", "retryable": false }
-```
+**Funded wallet accounts can use catalog grouping through `POST /v1/batches`
+with `workflow: "catalog_local_v1"`.** Submission requires a bound shared wallet
+and `match` or `batch` scope; saved status/results require `read`. The existing
+catalog flow returns a quote, starts only after acceptance, and provides paged
+results. See [the catalog workflow](https://platform.reach.dog/docs/catalog-workflow).
+This does not open the unrelated legacy title-batch or `/v1/catalog-groups` routes.
 
 Error envelopes always carry a `code`, a `message`, a `request_id`, and a `retryable` flag. Read `code`, not the HTTP status alone.
 
 ## How do I get access, and what does it cost?
 
-1. Create a developer key at https://intersect.reach.dog/developer
+1. Open https://platform.reach.dog/keys, sign in using the console's available options, and follow the wallet/key setup for your account.
 2. Send it as `Authorization: Bearer <key>` and include an `Idempotency-Key` header on each request.
-3. Pricing is per parameter (25 tokens each at current pricing), billed only when the request succeeds, with no base fee. A three-parameter request costs 75 tokens. A correct empty result still counts as a success; failed requests are not billed.
-4. Free tier: every account gets a daily free allowance of about 10,000 tokens (roughly 400 single-parameter calls at current pricing), refreshed every 24 hours, so you can evaluate the API without adding funds. See the access page for current pricing and plans.
+3. Single-title pricing is per requested parameter, billed when the request succeeds, with no base fee. Read `parameter_price` from `GET /v1/usage` for your current unit price. A correct empty result still counts as a success; failed requests are not billed. Catalog outputs are priced per selected output per catalog call, not per title; inspect its returned quote.
+4. Daily refill: an active API wallet is refilled at most once every 24 hours, checked on its next paid call. The refill raises a lower balance to a daily floor (currently 10,000 credits); it does not add to a higher balance, and unused refill credits do not carry over. Purchased credits stay on top. `wallet_refill_eligible_at` in `GET /v1/usage` shows when the next refill can apply. The console's demos and recipes are gated separately: GitHub sign-in provides the eligible evaluation path; Google/email console testing requires purchased wallet credits. Direct API-key requests follow the key's scopes, account access and wallet balance. Check `GET /v1/usage` and the console for your account's current balance and limits. Wallet credits are Reach Dog billing units, not model tokens.
 
 Repeating the same request with the same `Idempotency-Key` returns the saved answer with no new charge, within the idempotency window.
 
