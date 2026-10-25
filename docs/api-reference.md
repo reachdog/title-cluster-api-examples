@@ -42,7 +42,8 @@ A missing or invalid key returns `401 invalid_key`.
 
 - Single-title calls are priced per requested parameter, with no base fee. Read the current `parameter_price` from `GET /v1/usage`. Catalog calls price each selected output once per catalog call, regardless of title count; read the returned quote before accepting.
 - Billing is success only. A correct answer with an empty value (`null` or `[]`) still counts as a success and is billed. A failed request (validation error, an unavailable source, a dependency failure) is not billed.
-- Eligibility and credits are account-specific; no universal free allowance is promised. GitHub sign-in provides the console's eligible API/recipe evaluation path. Google/email console testing requires purchased wallet credits. That console gate is distinct from direct API-key requests, which use the key's scopes, account access and wallet balance.
+- Daily refill: an active API wallet is refilled at most once every 24 hours, checked on its next paid call. The refill raises a lower balance to a daily floor (currently 10,000 credits); it does not add to a higher balance, and unused refill credits do not carry over. Purchased credits stay on top. `wallet_refill_eligible_at` in `GET /v1/usage` shows when the next refill can apply.
+- Console access is gated separately. GitHub sign-in provides the console's eligible API/recipe evaluation path. Google/email console testing requires purchased wallet credits. That console gate is distinct from direct API-key requests, which use the key's scopes, account access and wallet balance.
 - Check your balance, current price and limits with [`GET /v1/usage`](#get-v1usage) and the console. Wallet credits are Reach Dog billing units, not provider model tokens.
 
 ## Request basics
