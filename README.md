@@ -79,7 +79,7 @@ A `null` value means that specific measurement was not available for that record
    node quickstart.js
    ```
 
-Both read `TITLE_API_KEY` from the environment. Never hardcode a key or commit it.
+Both read `TITLE_API_KEY` from the environment, then from `.env` at the repository root if the environment key is empty. This file uses `TITLE_API_KEY=value` on its own line, without quotes. Never hardcode a key or commit it.
 
 ## Handling uncertain and unavailable results
 

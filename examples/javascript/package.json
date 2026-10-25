@@ -6,6 +6,7 @@
   "description": "JavaScript examples for the Reach Dog Title & Cluster API",
   "engines": { "node": ">=18" },
   "scripts": {
-    "quickstart": "node quickstart.js"
+    "quickstart": "node quickstart.js",
+    "test": "node --test tests/quickstart.test.js"
   }
 }

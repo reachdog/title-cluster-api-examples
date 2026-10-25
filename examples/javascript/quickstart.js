@@ -7,14 +7,26 @@
 //   node quickstart.js
 
 import { randomUUID } from "node:crypto";
+import { existsSync, readFileSync } from "node:fs";
+
+function loadKey() {
+  const key = (process.env.TITLE_API_KEY || "").trim();
+  if (key) return key;
+  const env = new URL("../../.env", import.meta.url);
+  if (existsSync(env)) {
+    const line = readFileSync(env, "utf8").split(/\r?\n/).find(value => value.startsWith("TITLE_API_KEY="));
+    if (line) return line.slice("TITLE_API_KEY=".length).trim();
+  }
+  return "";
+}
 
 const BASE_URL = (
   process.env.TITLE_API_URL || "https://title-cluster-api-221381283627.us-east1.run.app"
 ).replace(/\/$/, "");
 
-const KEY = (process.env.TITLE_API_KEY || "").trim();
+const KEY = loadKey();
 if (!KEY) {
-  console.error("Set TITLE_API_KEY in your environment.");
+  console.error("Set TITLE_API_KEY in your environment or in a .env file at the repo root.");
   process.exit(1);
 }
 
@@ -28,7 +40,13 @@ async function ask(title, parameters) {
     },
     body: JSON.stringify({ title, parameters }),
   });
-  const body = await resp.json();
+  let body;
+  try {
+    body = await resp.json();
+  } catch (error) {
+    if (!(error instanceof SyntaxError)) throw error;
+    throw new Error(`HTTP ${resp.status}: API returned a non-JSON response. No automatic retry was made.`);
+  }
   if (!resp.ok) {
     // Error envelopes carry code / message / request_id / retryable.
     throw new Error(
