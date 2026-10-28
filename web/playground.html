@@ -670,7 +670,7 @@
     return '<div class="card"><div class="card-body">'
       + '<label class="lbl" for="apikey">Your API key</label>'
       + '<div class="keyrow"><div class="grow"><input class="in" id="apikey" type="password" placeholder="tca_..." autocomplete="off" spellcheck="false" value="' + esc(keyVal()) + '">'
-      + '<div class="hint">Sent only to the API as a Bearer token. <a href="https://intersect.reach.dog/developer" target="_blank" rel="noopener">Get a free key</a>.</div></div>'
+      + '<div class="hint">Sent only to the API as a Bearer token. <a href="https://platform.reach.dog/keys" target="_blank" rel="noopener">Get a free key</a>.</div></div>'
       + '<label class="remember"><input type="checkbox" id="remember"' + (state.remember ? " checked" : "") + '>Remember on this device</label></div>'
       + '</div></div>';
   }
@@ -1066,13 +1066,13 @@
     $("workBody").innerHTML =
         '<div class="dash"><div class="dash-head"><div><h1>API keys</h1>'
       + '<div class="sub">Keys authenticate every request as <code>Authorization: Bearer &lt;key&gt;</code>.</div></div>'
-      + '<div class="r"><a class="btn-primary" href="https://intersect.reach.dog/developer" target="_blank" rel="noopener">Create a key</a></div></div>'
+      + '<div class="r"><a class="btn-primary" href="https://platform.reach.dog/keys" target="_blank" rel="noopener">Create a key</a></div></div>'
       + '<div class="panel"><div class="panel-head"><h2>Your keys</h2></div><div class="panel-body" style="padding:0">'
       + '<table class="dtable"><thead><tr><th>Key</th><th>Label</th><th>Created</th><th>Last used</th><th class="r"></th></tr></thead><tbody>'
       + '<tr><td class="keymask">' + esc(mask) + '</td><td>This session</td><td>—</td><td>just now</td><td class="r">' + (k ? '<button class="btn-ghost" id="copyKey">Copy</button>' : '') + '</td></tr>'
       + '<tr><td class="keymask">tca_9f31…a7c2</td><td>Production</td><td>2026-09-12</td><td>2026-10-08</td><td class="r"><span class="badge eg">example</span></td></tr>'
       + '</tbody></table></div></div>'
-      + '<div class="note infobox">Keys are created and revoked in the developer portal (<a href="https://intersect.reach.dog/developer" target="_blank" rel="noopener">intersect.reach.dog/developer</a>). The session row reflects the key you entered in the Playground. The second row is example layout; wire this table to the key-management endpoint to list and revoke real keys (see handoff).</div>'
+      + '<div class="note infobox">Keys are created and revoked in Platform (<a href="https://platform.reach.dog/keys" target="_blank" rel="noopener">platform.reach.dog/keys</a>). The session row reflects the key you entered in the Playground. The second row is example layout; wire this table to the key-management endpoint to list and revoke real keys (see handoff).</div>'
       + '</div>';
     if (k) { const c = $("copyKey"); if (c) c.addEventListener("click", () => copyText(k, c)); }
   }
