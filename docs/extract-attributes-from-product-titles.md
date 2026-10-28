@@ -16,7 +16,7 @@ You want, for each one: what is it, what are its attributes, and what is it not 
 
 ## Step 1: get a key
 
-Create a developer key at https://intersect.reach.dog/developer and set it in your environment:
+Create a developer key at https://platform.reach.dog/keys and set it in your environment:
 
 ```bash
 export TITLE_API_KEY=your_key_here
@@ -90,8 +90,8 @@ Branch on the error `code`, not on the HTTP status alone.
 The runnable version of this walkthrough is in the examples repository:
 
 ```bash
-git clone <this repo>
-cd reachdog-title-api-examples/examples/python
+git clone https://github.com/reachdog/title-cluster-api-examples.git
+cd title-cluster-api-examples/examples/python
 pip install -r requirements.txt
 cp ../../.env.example ../../.env   # then put your key in it
 python quickstart.py
@@ -100,7 +100,7 @@ python handling_boundaries.py
 
 - Code: this repository
 - Live demo: the Hugging Face Space (link to be added)
-- Access and pricing: https://intersect.reach.dog/developer
+- Get a key: https://platform.reach.dog/keys
 
 ## Where to go next
 
