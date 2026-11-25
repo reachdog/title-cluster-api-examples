@@ -1,0 +1,289 @@
+{
+  "catalog_groups": [
+    {
+      "id": "season-all-season",
+      "family": "seasonal",
+      "label": "All-season",
+      "count": 11
+    },
+    {
+      "id": "season-winter",
+      "family": "seasonal",
+      "label": "Winter",
+      "count": 8
+    },
+    {
+      "id": "season-fall",
+      "family": "seasonal",
+      "label": "Fall",
+      "count": 5
+    },
+    {
+      "id": "occ-home-relaxation",
+      "family": "occasions",
+      "label": "Home relaxation",
+      "count": 6
+    },
+    {
+      "id": "uses-aromatherapy",
+      "family": "uses",
+      "label": "Aromatherapy",
+      "count": 8
+    }
+  ],
+  "group_members": [
+    {
+      "id": "season-all-season",
+      "members": [
+        {
+          "client_product_id": "4",
+          "canonical_product_id": "4",
+          "original_title": "Beeswax Taper Candles Set of 4 Natural",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "5",
+          "canonical_product_id": "5",
+          "original_title": "Unscented Pillar Candle 3x6 Ivory",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "6",
+          "canonical_product_id": "6",
+          "original_title": "Reed Diffuser Fig and Black Tea 100 ml",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "7",
+          "canonical_product_id": "7",
+          "original_title": "Reed Diffuser Eucalyptus Mint 100 ml",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "8",
+          "canonical_product_id": "8",
+          "original_title": "Ceramic Wax Melt Warmer Matte White",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "10",
+          "canonical_product_id": "10",
+          "original_title": "Room Spray Lavender and Sage 4 oz",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "12",
+          "canonical_product_id": "12",
+          "original_title": "Candle Wick Trimmer Brass",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "13",
+          "canonical_product_id": "13",
+          "original_title": "Candle Snuffer Matte Black",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "14",
+          "canonical_product_id": "14",
+          "original_title": "Glass Hurricane Candle Holder 10 inch",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "17",
+          "canonical_product_id": "17",
+          "original_title": "Essential Oil Blend Calm 10 ml",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "18",
+          "canonical_product_id": "18",
+          "original_title": "Ultrasonic Essential Oil Diffuser Wood Grain 300 ml",
+          "disposition": "retained"
+        }
+      ]
+    },
+    {
+      "id": "season-winter",
+      "members": [
+        {
+          "client_product_id": "1",
+          "canonical_product_id": "1",
+          "original_title": "Soy Wax Candle Cedar and Smoke 8 oz Amber Jar",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "2",
+          "canonical_product_id": "2",
+          "original_title": "Soy Wax Candle Fresh Linen 8 oz Amber Jar",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "3",
+          "canonical_product_id": "3",
+          "original_title": "Three Wick Candle Pumpkin Chai 14 oz",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "4",
+          "canonical_product_id": "4",
+          "original_title": "Beeswax Taper Candles Set of 4 Natural",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "9",
+          "canonical_product_id": "9",
+          "original_title": "Soy Wax Melts Vanilla Bean 6 Cubes",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "15",
+          "canonical_product_id": "15",
+          "original_title": "Wooden Wick Candle Sandalwood 10 oz",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "16",
+          "canonical_product_id": "16",
+          "original_title": "Travel Tin Candle Orange Clove 4 oz",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "20",
+          "canonical_product_id": "20",
+          "original_title": "Candle Gift Set Holiday Trio 3 x 4 oz Tins",
+          "disposition": "retained"
+        }
+      ]
+    },
+    {
+      "id": "season-fall",
+      "members": [
+        {
+          "client_product_id": "1",
+          "canonical_product_id": "1",
+          "original_title": "Soy Wax Candle Cedar and Smoke 8 oz Amber Jar",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "2",
+          "canonical_product_id": "2",
+          "original_title": "Soy Wax Candle Fresh Linen 8 oz Amber Jar",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "3",
+          "canonical_product_id": "3",
+          "original_title": "Three Wick Candle Pumpkin Chai 14 oz",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "11",
+          "canonical_product_id": "11",
+          "original_title": "Linen Spray Cotton Blossom 8 oz",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "15",
+          "canonical_product_id": "15",
+          "original_title": "Wooden Wick Candle Sandalwood 10 oz",
+          "disposition": "retained"
+        }
+      ]
+    },
+    {
+      "id": "occ-home-relaxation",
+      "members": [
+        {
+          "client_product_id": "1",
+          "canonical_product_id": "1",
+          "original_title": "Soy Wax Candle Cedar and Smoke 8 oz Amber Jar",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "2",
+          "canonical_product_id": "2",
+          "original_title": "Soy Wax Candle Fresh Linen 8 oz Amber Jar",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "6",
+          "canonical_product_id": "6",
+          "original_title": "Reed Diffuser Fig and Black Tea 100 ml",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "7",
+          "canonical_product_id": "7",
+          "original_title": "Reed Diffuser Eucalyptus Mint 100 ml",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "8",
+          "canonical_product_id": "8",
+          "original_title": "Ceramic Wax Melt Warmer Matte White",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "15",
+          "canonical_product_id": "15",
+          "original_title": "Wooden Wick Candle Sandalwood 10 oz",
+          "disposition": "retained"
+        }
+      ]
+    },
+    {
+      "id": "uses-aromatherapy",
+      "members": [
+        {
+          "client_product_id": "1",
+          "canonical_product_id": "1",
+          "original_title": "Soy Wax Candle Cedar and Smoke 8 oz Amber Jar",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "2",
+          "canonical_product_id": "2",
+          "original_title": "Soy Wax Candle Fresh Linen 8 oz Amber Jar",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "7",
+          "canonical_product_id": "7",
+          "original_title": "Reed Diffuser Eucalyptus Mint 100 ml",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "15",
+          "canonical_product_id": "15",
+          "original_title": "Wooden Wick Candle Sandalwood 10 oz",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "16",
+          "canonical_product_id": "16",
+          "original_title": "Travel Tin Candle Orange Clove 4 oz",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "17",
+          "canonical_product_id": "17",
+          "original_title": "Essential Oil Blend Calm 10 ml",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "18",
+          "canonical_product_id": "18",
+          "original_title": "Ultrasonic Essential Oil Diffuser Wood Grain 300 ml",
+          "disposition": "retained"
+        },
+        {
+          "client_product_id": "20",
+          "canonical_product_id": "20",
+          "original_title": "Candle Gift Set Holiday Trio 3 x 4 oz Tins",
+          "disposition": "retained"
+        }
+      ]
+    }
+  ]
+}
