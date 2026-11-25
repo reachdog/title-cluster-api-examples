@@ -131,6 +131,7 @@ You can request any mix of parameters in one call. A readable grouping of the pa
 Each workflow takes one Reach Dog catalog output, hands it to an AI model with your catalog, and has the model check Reach Dog's work against your products before it writes anything. Every workflow has a prompt you can paste into the chat app and a script that does the same through the model's API.
 
 - [Catalog groups to collection pages and breadcrumbs, with Claude](workflows/groups-to-collection-pages/README.md)
+- [Keyword opportunities to an SEO keyword plan, with Claude](workflows/keywords-to-seo-plan/README.md)
 
 The [workflows/demo](workflows/demo) folder holds a made-up 20-product shop and its real Reach Dog results, so you can try a workflow before sending your own catalog.
 
