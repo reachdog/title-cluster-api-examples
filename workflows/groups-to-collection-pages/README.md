@@ -5,7 +5,7 @@ Reach Dog sorts your catalog into groups by season, occasion and use. This workf
 ## What you need
 
 - Your catalog as a CSV with a `title` column.
-- A Reach Dog catalog job with the `catalog_groups` and `group_members` outputs (25 Reach Dog tokens each, for the whole catalog). See the [catalog workflow](https://platform.reach.dog/docs/catalog-workflow) and https://reach.dog/developers/catalog-enrichment-api
+- A Reach Dog catalog job with the `catalog_groups` and `group_members` outputs. See the [catalog workflow](https://platform.reach.dog/docs/catalog-workflow) and https://reach.dog/developers/catalog-enrichment-api
 - A Claude account (for the chat version) or a Claude API key (for the script).
 
 ## In the Claude app

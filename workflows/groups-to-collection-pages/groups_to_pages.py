@@ -14,7 +14,7 @@ Needs:
 Both are read from the environment, then from a .env file at the repo root.
 
 The catalog CSV needs a "title" column. The Reach Dog results must include the
-catalog_groups and group_members outputs (25 Reach Dog tokens each for the whole catalog).
+catalog_groups and group_members outputs.
 """
 import argparse
 import csv
