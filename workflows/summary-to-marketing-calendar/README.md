@@ -13,6 +13,10 @@ Reach Dog reads your whole catalog and sums it up: the top categories, who your 
 1. Attach your catalog CSV and the Reach Dog summary JSON.
 2. Paste the prompt from [prompt.md](prompt.md).
 
+## Optional: audit the Reach Dog JSON first
+
+In a fresh chat, attach the same two files and paste the prompt from [../audit-prompt.md](../audit-prompt.md). Your model reviews the JSON against your catalog and suggests improvements before you start.
+
 ## With the script
 
 Put `ANTHROPIC_API_KEY` and `TITLE_API_KEY` in the `.env` file at the repo root (see `.env.example`), then:

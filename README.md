@@ -134,6 +134,8 @@ Each workflow takes one Reach Dog catalog output, hands it to an AI model with y
 - [Keyword opportunities to an SEO keyword plan, with Claude](workflows/keywords-to-seo-plan/README.md)
 - [Catalog summary to a 12-month marketing calendar, with Claude](workflows/summary-to-marketing-calendar/README.md)
 
+Optional first step for any workflow: [audit the Reach Dog JSON](workflows/audit-prompt.md) against your catalog in a fresh chat.
+
 The [workflows/demo](workflows/demo) folder holds a made-up 20-product shop and its real Reach Dog results, so you can try a workflow before sending your own catalog.
 
 ## Suggested repository metadata (for maintainers)
