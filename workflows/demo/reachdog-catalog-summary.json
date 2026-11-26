@@ -1,0 +1,72 @@
+{
+  "catalog_summary": {
+    "products_found": 20,
+    "products_matched": 20,
+    "match_rate": 1.0,
+    "unique_clusters": 20,
+    "unique_clusters_total": 20,
+    "clusters_capped": false,
+    "top_categories": [
+      "home fragrance",
+      "reed diffusers",
+      "scented candles",
+      "candle accessories",
+      "soy candles"
+    ],
+    "top_demographics": [
+      "homeowners",
+      "candle enthusiasts",
+      "home decorators",
+      "wellness seekers",
+      "gift buyers"
+    ],
+    "top_occasions": [
+      "home relaxation",
+      "dinner ambiance",
+      "cozy evenings",
+      "gift giving",
+      "home decor"
+    ],
+    "top_use_cases": [
+      "aromatherapy",
+      "room fragrance",
+      "decorative lighting",
+      "gift giving",
+      "room scenting"
+    ],
+    "top_seasons": [
+      "Year-round",
+      "Winter",
+      "Fall",
+      "Spring",
+      "Christmas"
+    ],
+    "coverage": {
+      "requested_clusters": 20,
+      "loaded_clusters": 20,
+      "availability": "available"
+    },
+    "seasonal_peak": "All Year",
+    "coverage_score": null,
+    "gap_density": null,
+    "season_label_map": {
+      "Year-round": [
+        "all year",
+        "year-round",
+        "all seasons"
+      ],
+      "Winter": [
+        "winter"
+      ],
+      "Fall": [
+        "fall"
+      ],
+      "Spring": [
+        "spring"
+      ],
+      "Christmas": [
+        "christmas"
+      ]
+    }
+  }
+}
