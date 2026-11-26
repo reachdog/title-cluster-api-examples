@@ -29,6 +29,20 @@ python groups_to_pages.py --catalog my-catalog.csv --batch-id <your Reach Dog ca
 
 Or pass a saved results file with `--results reachdog-results.json`. The script writes `collection-pages.md`.
 
+## With Grok
+
+The same prompt works in the Grok app (grok.com): attach your catalog CSV and the Reach Dog JSON, then paste `prompt.md`. The audit prompt works there too.
+
+To run it from code with the xAI API, put `XAI_API_KEY` and `TITLE_API_KEY` in the `.env` file at the repo root, then:
+
+```
+cd workflows/groups-to-collection-pages
+pip install -r requirements-grok.txt
+python groups_to_pages_grok.py --catalog my-catalog.csv --batch-id <your Reach Dog catalog job id>
+```
+
+It sends the same prompt to `grok-4.7` by default. Set `XAI_MODEL` to use another Grok model.
+
 ## What you get
 
 1. A check table per group: every product marked keep or question, with a one-line reason, plus products that look like they belong but are missing.

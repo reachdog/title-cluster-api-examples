@@ -31,6 +31,20 @@ python keywords_to_seo_plan.py --catalog my-catalog.csv --batch-id <your Reach D
 
 Or pass a saved results file with `--results reachdog-results.json`. The script writes `seo-keyword-plan.md`.
 
+## With Grok
+
+The same prompt works in the Grok app (grok.com): attach your catalog CSV and the Reach Dog JSON, then paste `prompt.md`. The audit prompt works there too.
+
+To run it from code with the xAI API, put `XAI_API_KEY` and `TITLE_API_KEY` in the `.env` file at the repo root, then:
+
+```
+cd workflows/keywords-to-seo-plan
+pip install -r requirements-grok.txt
+python keywords_to_seo_plan_grok.py --catalog my-catalog.csv --batch-id <your Reach Dog catalog job id>
+```
+
+It sends the same prompt to `grok-4.7` by default. Set `XAI_MODEL` to use another Grok model.
+
 ## What you get
 
 1. A screening table: the keywords Claude dropped, in groups (other brands, do-it-yourself, bulk and wholesale, things you don't sell), with a reason for each group. Duplicates are merged.
