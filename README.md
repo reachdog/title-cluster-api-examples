@@ -134,7 +134,7 @@ Each workflow takes one Reach Dog catalog output, hands it to an AI model with y
 - [Keyword opportunities to an SEO keyword plan, with Claude](workflows/keywords-to-seo-plan/README.md)
 - [Catalog summary to a 12-month marketing calendar, with Claude](workflows/summary-to-marketing-calendar/README.md)
 
-Every workflow also has a Grok version of the script (`*_grok.py`, xAI API), and the prompts work in the Grok app as is.
+Every workflow also has a Grok version of the script (`*_grok.py`, xAI API) and a Gemini version (`*_gemini.py`, Gemini API), and the prompts work in the Grok and Gemini apps as is.
 
 Optional first step for any workflow: [audit the Reach Dog JSON](workflows/audit-prompt.md) against your catalog in a fresh chat.
 
