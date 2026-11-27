@@ -15,6 +15,10 @@ Reach Dog finds the real searches behind your catalog: the search term, monthly 
 
 The prompt was written for the demo candle shop. Change the drop rules to fit yours: "making candles yourself" becomes whatever the do-it-yourself version of your products is.
 
+## Optional: audit the Reach Dog JSON first
+
+In a fresh chat, attach the same two files and paste the prompt from [../audit-prompt.md](../audit-prompt.md). Your model reviews the JSON against your catalog and suggests improvements before you start.
+
 ## With the script
 
 Put `ANTHROPIC_API_KEY` and `TITLE_API_KEY` in the `.env` file at the repo root (see `.env.example`), then:
