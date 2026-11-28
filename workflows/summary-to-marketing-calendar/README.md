@@ -43,6 +43,20 @@ python summary_to_calendar_grok.py --catalog my-catalog.csv --batch-id <your Rea
 
 It sends the same prompt to `grok-4.7` by default. Set `XAI_MODEL` to use another Grok model.
 
+## With Gemini
+
+The same prompt works in the Gemini app (gemini.google.com): attach your catalog CSV and the Reach Dog JSON, then paste `prompt.md`. The audit prompt works there too.
+
+To run it from code with the Gemini API, put `GEMINI_API_KEY` and `TITLE_API_KEY` in the `.env` file at the repo root, then:
+
+```
+cd workflows/summary-to-marketing-calendar
+pip install -r requirements-gemini.txt
+python summary_to_calendar_gemini.py --catalog my-catalog.csv --batch-id <your Reach Dog catalog job id>
+```
+
+It sends the same prompt to `gemini-4-neon` by default. Set `GEMINI_MODEL` to use another Gemini model.
+
 ## What you get
 
 1. A check of the summary: for every audience, occasion and season, the products that back it up, with the weak ones flagged (too generic, only one product, or a guess). It also points out labels that go further than your product titles, and seasons the summary leaves out.

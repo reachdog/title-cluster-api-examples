@@ -45,6 +45,20 @@ python keywords_to_seo_plan_grok.py --catalog my-catalog.csv --batch-id <your Re
 
 It sends the same prompt to `grok-4.7` by default. Set `XAI_MODEL` to use another Grok model.
 
+## With Gemini
+
+The same prompt works in the Gemini app (gemini.google.com): attach your catalog CSV and the Reach Dog JSON, then paste `prompt.md`. The audit prompt works there too.
+
+To run it from code with the Gemini API, put `GEMINI_API_KEY` and `TITLE_API_KEY` in the `.env` file at the repo root, then:
+
+```
+cd workflows/keywords-to-seo-plan
+pip install -r requirements-gemini.txt
+python keywords_to_seo_plan_gemini.py --catalog my-catalog.csv --batch-id <your Reach Dog catalog job id>
+```
+
+It sends the same prompt to `gemini-4-neon` by default. Set `GEMINI_MODEL` to use another Gemini model.
+
 ## What you get
 
 1. A screening table: the keywords Claude dropped, in groups (other brands, do-it-yourself, bulk and wholesale, things you don't sell), with a reason for each group. Duplicates are merged.
